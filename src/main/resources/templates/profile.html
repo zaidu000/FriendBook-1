@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Profile</title>
+</head>
+
+<body>
+	<h2>Welcome, <span th:text="${user.fullName}"></span></h2>
+	<p>Username: <span th:text="${user.getUsernameField()}"></span></p>
+	<p>Email: <span th:text="${user.email}"></span></p>
+
+	<!-- Profile Image -->
+	<img th:src="@{'/images/' + ${user.profileImage}}" alt="Profile Image" width="100" height="100" />
+	<form th:action="@{/profile/upload}" method="post" enctype="multipart/form-data">
+		<input type="file" name="image">
+		<button type="submit">Upload Profile Image</button>
+	</form>
+
+	<!-- Favorite Fields -->
+	<form th:action="@{/profile/update}" method="post">
+		<label>Favorite Songs:</label><br>
+		<input type="text" name="favSongs" th:value="${user.favSongs}" /><br>
+
+		<label>Favorite Books:</label><br>
+		<input type="text" name="favBooks" th:value="${user.favBooks}" /><br>
+
+		<label>Favorite Places:</label><br>
+		<input type="text" name="favPlaces" th:value="${user.favPlaces}" /><br>
+
+		<button type="submit">Save</button>
+	</form>
+
+	<a th:href="@{/logout}">Logout</a>
+</body>
+
+</html>

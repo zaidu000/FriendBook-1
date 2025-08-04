@@ -1,20 +1,117 @@
-<!-- In resources/templates/signup.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Signup</title>
+	<title>Signup - FriendBook</title>
+	<style>
+		body {
+			margin: 0;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color: #f0f2f5;
+		}
+
+		.navbar {
+			background-color: #ffffff;
+			padding: 15px 30px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.navbar h1 {
+			margin: 0;
+			font-size: 24px;
+			color: #333;
+		}
+
+		.nav-links a {
+			text-decoration: none;
+			color: #333;
+			margin-left: 20px;
+			font-weight: 500;
+			transition: color 0.3s;
+		}
+
+		.nav-links a:hover {
+			color: #007bff;
+		}
+
+		.signup-container {
+			width: 100%;
+			max-width: 400px;
+			margin: 80px auto;
+			background: #ffffff;
+			padding: 40px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.signup-container h2 {
+			text-align: center;
+			margin-bottom: 30px;
+			color: #333;
+		}
+
+		.signup-container input {
+			width: 100%;
+			padding: 12px;
+			margin-bottom: 20px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			font-size: 14px;
+		}
+
+		.signup-container button {
+			width: 100%;
+			padding: 12px;
+			background-color: #28a745;
+			color: white;
+			border: none;
+			font-size: 16px;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s;
+		}
+
+		.signup-container button:hover {
+			background-color: #218838;
+		}
+
+		#message {
+			text-align: center;
+			font-weight: bold;
+			margin-top: 10px;
+		}
+	</style>
 </head>
 
 <body>
-	<h2>Signup (AJAX)</h2>
-	<form id="signupForm">
-		<input type="text" id="fullName" placeholder="Full Name" required><br>
-		<input type="email" id="email" placeholder="Email" required><br>
-		<input type="password" id="password" placeholder="Password" required><br>
-		<button type="submit">Signup</button>
-	</form>
-	<div id="message"></div>
+
+	<!-- Navbar -->
+	<div class="navbar">
+		<h1>FriendBook</h1>
+		<div class="nav-links">
+			<a th:href="@{/}">Home</a>
+			<a th:href="@{/about}">About</a>
+			<a th:href="@{/login}">Login</a>
+			<a th:href="@{/signup}">Register</a>
+		</div>
+	</div>
+
+	<!-- Signup Form -->
+	<div class="signup-container">
+		<h2>Register</h2>
+		<form id="signupForm">
+			<input type="text" id="fullName" placeholder="Full Name" required><br>
+			<input type="email" id="email" placeholder="Email" required><br>
+			<input type="password" id="password" placeholder="Password" required><br>
+			<button type="submit">Signup</button>
+		</form>
+		<div id="message"></div>
+	</div>
+
+	<!-- JavaScript Logic (Unchanged) -->
 	<script>
 		document.getElementById("signupForm").addEventListener("submit", function (e) {
 			e.preventDefault();
@@ -37,6 +134,7 @@
 				});
 		});
 	</script>
+
 </body>
 
 </html>

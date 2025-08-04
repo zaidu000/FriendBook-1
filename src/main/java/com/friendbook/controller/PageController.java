@@ -47,6 +47,11 @@ public class PageController {
 	public String showHomePage() {
 		return "index";
 	}
+	
+	@GetMapping("/about")
+	public String showAboutPage() {
+		return "about";
+	}
 
 	@GetMapping("/profile")
 	public String showProfilePage(Model model, Principal principal) {

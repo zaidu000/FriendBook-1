@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>About - FriendBook</title>
+	<style>
+		body {
+			margin: 0;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color: #f7f9fc;
+		}
+
+		.navbar {
+			background-color: #ffffff;
+			padding: 15px 30px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.navbar h1 {
+			margin: 0;
+			font-size: 24px;
+			color: #333;
+		}
+
+		.navbar .nav-links a {
+			text-decoration: none;
+			color: #333;
+			margin-left: 20px;
+			font-weight: 500;
+			transition: color 0.3s;
+		}
+
+		.navbar .nav-links a:hover {
+			color: #007bff;
+		}
+
+		.container {
+			padding: 50px 20px;
+			max-width: 900px;
+			margin: 0 auto;
+		}
+
+		h2 {
+			font-size: 32px;
+			color: #222;
+			text-align: center;
+			margin-bottom: 30px;
+		}
+
+		.feature {
+			display: flex;
+			align-items: center;
+			margin-bottom: 40px;
+			background: #fff;
+			border-radius: 10px;
+			padding: 20px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+
+		.feature img {
+			width: 200px;
+			border-radius: 10px;
+			margin-right: 25px;
+		}
+
+		.feature div {
+			flex: 1;
+		}
+
+		.feature h3 {
+			margin-top: 0;
+			color: #333;
+		}
+
+		.feature p {
+			color: #555;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- Navbar -->
+	<div class="navbar">
+		<h1>FriendBook</h1>
+		<div class="nav-links">
+			<a th:href="@{/}">Home</a>
+			<a th:href="@{/about}">About</a>
+			<a th:href="@{/login}">Login</a>
+			<a th:href="@{/signup}">Register</a>
+		</div>
+	</div>
+
+	<!-- About Content -->
+	<div class="container">
+		<h2>What is FriendBook?</h2>
+
+		<div class="feature">
+			<img src="/about/signup.PNG" alt="Signup/Login">
+			<div>
+				<h3>Secure Signup & Login</h3>
+				<p>Users can create an account and log in securely using Spring Security with password encryption.</p>
+			</div>
+		</div>
+
+		<div class="feature">
+			<img src="/about/profile.png" alt="Profile Features">
+			<div>
+				<h3>User Profile</h3>
+				<p>Update profile picture, view own posts, followers/following count, and edit profile details easily.
+				</p>
+			</div>
+		</div>
+
+		<div class="feature">
+			<img src="/about/follow.PNG" alt="Follow System">
+			<div>
+				<h3>Follow / Unfollow Users</h3>
+				<p>Users can follow or unfollow others, and view follower/following counts dynamically.</p>
+			</div>
+		</div>
+
+		<div class="feature">
+			<img src="/about/posts.PNG" alt="Posts Feature">
+			<div>
+				<h3>Create, Edit, Delete Posts</h3>
+				<p>Post images with captions, edit them, and delete your own posts. All posts are displayed in the main
+					feed.</p>
+			</div>
+		</div>
+
+		<div class="feature">
+			<img src="/about/like.PNG" alt="Like System">
+			<div>
+				<h3>Like / Unlike Posts</h3>
+				<p>Users can like or unlike any post, and the like count updates in real-time.</p>
+			</div>
+		</div>
+
+		<div class="feature">
+			<img src="/about/comment.PNG" alt="Comments">
+			<div>
+				<h3>Comment on Posts</h3>
+				<p>Just like Instagram, users can leave comments under posts, and they are visible instantly below each
+					post.</p>
+			</div>
+		</div>
+
+		<div class="feature">
+			<img src="/about/feed.PNG" alt="News Feed">
+			<div>
+				<h3>Live News Feed</h3>
+				<p>Explore all posts from users across FriendBook in a clean and modern feed.</p>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+
+</html>

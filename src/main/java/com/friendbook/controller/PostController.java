@@ -26,7 +26,7 @@ public class PostController {
 	private UserRepository userRepository;
 
 	@GetMapping("/posts")
-	public String viewAllPosts(Model model) {
+	public String viewAllPosts(Model model, Principal principal) {
 		model.addAttribute("posts", postService.getAllPosts());
 		return "posts";
 	}

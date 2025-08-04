@@ -275,26 +275,27 @@
 				</span>
 				<button type="button" class="like-btn" th:id="'like-btn-' + ${post.id}"
 					th:attr="onclick=|toggleLike(${post.id})|">Like/Unlike</button>
-					<!-- Comment Section -->
-					<div style="margin-top: 10px;">
-					    <!-- Existing Comments -->
-					    <div th:id="'comments-' + ${post.id}">
-					        <div th:each="comment : ${post.comments}">
-					            <p><strong th:text="${comment.user.getUsernameField()}">Username</strong>: 
-					               <span th:text="${comment.text}">Comment text</span></p>
-					        </div>
-					    </div>
-
-					    <!-- Add Comment Form -->
-					    <form th:onsubmit="'submitComment(event,' + ${post.id} + ')'" method="post">
-					        <input type="text" name="text" placeholder="Add a comment..." required
-					               style="width: 70%; padding: 6px; margin-right: 10px; border-radius: 5px; border: 1px solid #ccc;" />
-					        <button type="submit"
-					                style="padding: 6px 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-					            Comment
-					        </button>
-					    </form>
+				<!-- Comment Section -->
+				<div style="margin-top: 10px;">
+					<!-- Existing Comments -->
+					<div th:id="'comments-' + ${post.id}">
+						<div th:each="comment : ${post.comments}">
+							<p><strong th:text="${comment.user.getUsernameField()}">Username</strong>:
+								<span th:text="${comment.text}">Comment text</span>
+							</p>
+						</div>
 					</div>
+
+					<!-- Add Comment Form -->
+					<form th:onsubmit="'submitComment(event,' + ${post.id} + ')'" method="post">
+						<input type="text" name="text" placeholder="Add a comment..." required
+							style="width: 70%; padding: 6px; margin-right: 10px; border-radius: 5px; border: 1px solid #ccc;" />
+						<button type="submit"
+							style="padding: 6px 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+							Comment
+						</button>
+					</form>
+				</div>
 
 
 				<!-- Delete -->
@@ -331,7 +332,7 @@
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
-				body: new URLSearchParams({ text: commentText })
+				body: new URLSearchParams({text: commentText})
 			});
 
 			if (response.ok) {

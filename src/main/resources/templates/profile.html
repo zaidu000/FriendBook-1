@@ -2,96 +2,413 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Profile</title>
+	<title>Profile - FriendBook</title>
+	<style>
+		:root {
+			--primary: #007bff;
+			--bg: #f0f2f5;
+			--card-bg: #ffffff;
+			--text-dark: #333;
+			--text-muted: #666;
+		}
+
+		body {
+			margin: 0;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color: var(--bg);
+		}
+
+		.navbar {
+			background-color: var(--card-bg);
+			padding: 15px 30px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.navbar h1 {
+			margin: 0;
+			font-size: 24px;
+			color: var(--text-dark);
+		}
+
+		.nav-links {
+			display: flex;
+			align-items: center;
+		}
+
+		.nav-links a {
+			text-decoration: none;
+			color: var(--text-dark);
+			margin-left: 20px;
+			font-weight: 500;
+			transition: color 0.3s;
+		}
+
+		.nav-links a:hover {
+			color: var(--primary);
+		}
+
+		.search-bar {
+			margin: 10px 30px;
+			text-align: right;
+		}
+
+		.search-bar input[type="text"] {
+			padding: 8px 12px;
+			border: 1px solid #ccc;
+			border-radius: 20px;
+			width: 200px;
+			outline: none;
+		}
+
+		.search-bar button {
+			background-color: var(--primary);
+			color: #fff;
+			border: none;
+			padding: 8px 16px;
+			border-radius: 20px;
+			cursor: pointer;
+			margin-left: 10px;
+		}
+
+		.container {
+			max-width: 900px;
+			margin: 30px auto;
+			background: var(--card-bg);
+			padding: 30px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.profile-header {
+			display: flex;
+			align-items: center;
+			margin-bottom: 30px;
+		}
+
+		.profile-header img {
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+			margin-right: 20px;
+			object-fit: cover;
+		}
+
+		.profile-info h2,
+		.profile-info p {
+			margin: 5px 0;
+		}
+
+		.upload-section,
+		.favorites {
+			margin: 20px 0;
+		}
+
+		.upload-section input[type="file"] {
+			display: inline-block;
+			margin-right: 10px;
+		}
+
+		.upload-section button {
+			padding: 6px 12px;
+			background-color: var(--primary);
+			border: none;
+			color: #fff;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		.favorites input {
+			width: 100%;
+			padding: 8px;
+			margin-bottom: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
+
+		.favorites button {
+			background-color: var(--primary);
+			color: white;
+			border: none;
+			padding: 8px 16px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		.add-post-link {
+			display: inline-block;
+			margin: 20px 0;
+			color: var(--primary);
+			font-weight: bold;
+			text-decoration: none;
+		}
+
+		.card {
+			background: var(--card-bg);
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			padding: 15px;
+			margin: 20px 0;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+		}
+
+		.card img {
+			width: 100%;
+			border-radius: 8px;
+			margin-top: 10px;
+		}
+
+		.card-buttons {
+			margin-top: 10px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.card-buttons button,
+		.card-buttons a {
+			padding: 6px 12px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			text-decoration: none;
+			color: white;
+		}
+
+		.like-btn {
+			background-color: #28a745;
+		}
+
+		.delete-btn {
+			background-color: #dc3545;
+		}
+
+		.edit-btn {
+			background-color: #ffc107;
+			color: black;
+		}
+	</style>
 </head>
 
 <body>
-
-	<h2>Welcome, <span th:text="${user.fullName}"></span></h2>
-	<p>Username: <span th:text="${user.getUsernameField()}"></span></p>
-	<p>Email: <span th:text="${user.email}"></span></p>
-
-	<!-- Profile Image -->
-	<img th:src="@{'/images/' + ${user.profileImage}}" alt="Profile Image" width="100" height="100" />
-	<form th:action="@{/profile/upload}" method="post" enctype="multipart/form-data" th:if="${!viewingOtherUser}">
-		<input type="file" name="image">
-		<button type="submit">Upload Profile Image</button>
-	</form>
-
-	<!-- Favorite Fields -->
-	<form th:action="@{/profile/update}" method="post" th:if="${!viewingOtherUser}">
-		<label>Favorite Songs:</label><br>
-		<input type="text" name="favSongs" th:value="${user.favSongs}" /><br>
-
-		<label>Favorite Books:</label><br>
-		<input type="text" name="favBooks" th:value="${user.favBooks}" /><br>
-
-		<label>Favorite Places:</label><br>
-		<input type="text" name="favPlaces" th:value="${user.favPlaces}" /><br>
-
-		<button type="submit">Save</button>
-	</form>
-
-	<!-- Followers / Following Count -->
-	<p>Followers: <span th:text="${followersCount}">0</span></p>
-	<p>Following: <span th:text="${followingCount}">0</span></p>
-
-	<!-- Follow/Unfollow Button (only shown if viewing another user's profile) -->
-	<div id="followSection" th:if="${viewingOtherUser}">
-		<button id="followBtn" th:attr="data-following=${isFollowing}" onclick="toggleFollow()">
-			<span th:text="${isFollowing} ? 'Unfollow' : 'Follow'">Follow</span>
-		</button>
-	</div>
-
-	<a th:href="@{/posts}">View All Posts</a>
-
-	<h3>Your Posts</h3>
-	<div th:each="post : ${userPosts}">
-		<h4 th:text="${post.caption}"></h4>
-		<img th:src="@{'/posts/' + ${post.imagePath}}" width="150" />
-		<div>
-			<span th:id="'like-count-' + ${post.id}" th:text="${post.likeCount}">0</span> Likes
-			<button type="button" th:id="'like-btn-' + ${post.id}" th:attr="onclick=|toggleLike(${post.id})|">
-				Like/Unlike
-			</button>
+	<!-- Navbar -->
+	<div class="navbar">
+		<h1>FriendBook</h1>
+		<div class="nav-links">
+			<a th:href="@{/profile}">Home</a>
+			<a th:href="@{/posts}">Feed</a>
+			<a th:href="@{/logout}">Logout</a>
 		</div>
-		<form th:action="@{'/posts/delete/' + ${post.id}}" method="post">
-			<button type="submit">Delete</button>
-		</form>
-		<a th:href="@{'/posts/edit/' + ${post.id}}">Edit</a>
 	</div>
 
+	<!-- Search -->
+	<form th:action="@{/search}" method="get" class="search-bar">
+		<input type="text" name="query" placeholder="Search by username" required />
+		<button type="submit">Search</button>
+	</form>
+
+	<!-- Container -->
+	<div class="container">
+		<div class="profile-header">
+			<img id="profileImg" th:src="@{'/images/' + ${user.profileImage}}" alt="Profile Image" />
+			<div class="profile-info">
+				<h2 th:text="${user.fullName}">User Name</h2>
+				<p>Username: <span th:text="${user.getUsernameField()}"></span></p>
+				<p>Email: <span th:text="${user.email}"></span></p>
+				<p>Followers: <span th:text="${followersCount}"></span> | Following: <span
+						th:text="${followingCount}"></span></p>
+			</div>
+		</div>
+
+		<!-- Upload profile image -->
+		<div class="upload-section">
+			<form id="uploadForm" th:action="@{/profile/upload}" method="post" enctype="multipart/form-data">
+				<input type="file" name="image" id="imageInput" required>
+				<button type="submit">Upload</button>
+			</form>
+		</div>
+
+		<!-- Favorite Fields -->
+		<div class="favorites">
+			<h3>Favorites</h3>
+			<form id="favoritesForm" th:action="@{/profile/update}" method="post">
+				<input type="text" name="favSongs" id="favSongs" th:value="${user.favSongs}"
+					placeholder="Favorite Songs">
+				<input type="text" name="favBooks" id="favBooks" th:value="${user.favBooks}"
+					placeholder="Favorite Books">
+				<input type="text" name="favPlaces" id="favPlaces" th:value="${user.favPlaces}"
+					placeholder="Favorite Places">
+				<button type="submit">Save</button>
+			</form>
+		</div>
+
+		<!-- Add Post Link -->
+		<!--<a class="add-post-link" th:href="@{/posts}">+ Add New Post</a> -->
+		<button class="add-post-link" onclick="toggleAddPostForm()">+ Add New Post</button>
+		<!-- Add Post Form (Initially Hidden) -->
+		<div id="addPostForm" style="display:none; margin-top: 20px; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
+			<h3>Add a New Post</h3>
+			<form id="createPostForm" enctype="multipart/form-data">
+				<input type="text" name="caption" placeholder="Caption" required style="width:100%; margin-bottom:10px;"><br>
+				<input type="file" name="image" required style="margin-bottom:10px;"><br>
+				<button type="submit">Post</button>
+				<button type="button" onclick="toggleAddPostForm()">Cancel</button>
+			</form>
+			<div id="postMessage" style="margin-top:10px;"></div>
+		</div>
+
+
+		<!-- Posts Display -->
+		<h3>Your Posts</h3>
+		<div th:each="post : ${userPosts}" class="card">
+			<h4 th:text="${post.caption}">Post Caption</h4>
+			<img th:src="@{'/posts/' + ${post.imagePath}}" />
+
+			<!-- Like/Unlike and Buttons -->
+			<div class="card-buttons">
+				<span>
+					<span th:id="'like-count-' + ${post.id}" th:text="${post.likeCount}">0</span> Likes
+				</span>
+				<button type="button" class="like-btn" th:id="'like-btn-' + ${post.id}"
+					th:attr="onclick=|toggleLike(${post.id})|">Like/Unlike</button>
+
+				<!-- Delete -->
+				<button class="delete-btn" th:attr="data-id=${post.id}" onclick="confirmDelete(this)">Delete</button>
+
+				<!-- Edit -->
+				<button class="edit-btn" th:attr="data-id=${post.id}" onclick="showEditForm(this)">Edit</button>
+			</div>
+
+			<!-- Hidden Edit Form -->
+			<div th:id="'edit-form-' + ${post.id}" style="display:none; margin-top: 10px;">
+				<form th:action="@{'/posts/update/' + ${post.id}}" method="post"
+					onsubmit="return handleEditSubmit(event, this)">
+					<input type="text" name="caption" th:value="${post.caption}" required />
+					<button type="submit">Update</button>
+					<button type="button" th:attr="onclick=|cancelEdit(${post.id})|">Cancel</button>
+				</form>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- JS: AJAX Logic -->
 	<script>
-		let isFollowing = /*[[${isFollowing}]]*/ false;
-		const targetUserId = /*[[${user.id}]]*/ 0;
+		function toggleAddPostForm() {
+			const form = document.getElementById("addPostForm");
+			form.style.display = form.style.display === "none" ? "block" : "none";
+		}
 
-		async function toggleFollow() {
-			const method = isFollowing ? 'DELETE' : 'POST';
-			const response = await fetch(`/api/follow/${targetUserId}`, {method});
+		// Handle create post
+		document.getElementById("createPostForm").addEventListener("submit", async function (e) {
+			e.preventDefault();
 
-			if (response.ok) {
-				isFollowing = !isFollowing;
-				const btn = document.getElementById("followBtn");
-				btn.innerText = isFollowing ? "Unfollow" : "Follow";
-				alert(isFollowing ? "Followed!" : "Unfollowed!");
-				location.reload(); // refresh to update count
+			const form = e.target;
+			const formData = new FormData(form);
+
+			const res = await fetch("/posts/create", {
+				method: "POST",
+				body: formData
+			});
+
+			const msg = document.getElementById("postMessage");
+
+			if (res.ok) {
+				msg.innerText = "Post created successfully!";
+				msg.style.color = "green";
+				form.reset();
+				setTimeout(() => {
+					location.reload(); // You can replace with dynamic DOM update later
+				}, 1000);
 			} else {
-				alert("Something went wrong!");
+				msg.innerText = "Failed to create post!";
+				msg.style.color = "red";
+			}
+		});
+
+		function showEditForm(btn) {
+			const postId = btn.getAttribute("data-id");
+			const form = document.getElementById(`edit-form-${postId}`);
+			form.style.display = "block";
+			form.scrollIntoView({behavior: 'smooth', block: 'center'});
+		}
+
+		function cancelEdit(postId) {
+			document.getElementById(`edit-form-${postId}`).style.display = "none";
+		}
+
+		// Handle Edit Submit (Prevent page reload)
+		async function handleEditSubmit(event, form) {
+			event.preventDefault();
+			const postId = form.action.split("/").pop(); // last part of URL
+			const formData = new FormData(form);
+			const caption = formData.get("caption");
+
+			const res = await fetch(`/posts/update/${postId}`, {
+				method: "POST",
+				body: new URLSearchParams({caption})
+			});
+
+			if (res.ok) {
+				alert("Post updated!");
+				form.style.display = "none";
+				location.reload(); // or update the caption dynamically
+			} else {
+				alert("Failed to update post.");
+			}
+			return false;
+		}
+
+		function confirmDelete(btn) {
+			const postId = btn.getAttribute("data-id");
+			if (confirm("Are you sure you want to delete this post?")) {
+				const form = document.createElement('form');
+				form.method = 'POST';
+				form.action = `/posts/delete/${postId}`;
+				document.body.appendChild(form);
+				form.submit();
 			}
 		}
-		
-		async function toggleLike(postId) {
-		        const res = await fetch(`/api/likes/${postId}`, { method: 'POST' });
-		        if (res.ok) {
-		            const newCount = await res.text();
-		            document.getElementById(`like-count-${postId}`).innerText = newCount;
-		        } else {
-		            alert("Failed to like/unlike");
-		        }
-		    }
-	</script>
 
-	<a th:href="@{/logout}">Logout</a>
+		// Update favorites without page reload
+		document.getElementById("favoritesForm").addEventListener("submit", async function (e) {
+			e.preventDefault();
+			const formData = new FormData(e.target);
+			const res = await fetch("/profile/update", {
+				method: "POST",
+				body: formData
+			});
+			if (res.ok) {
+				alert("Favorites updated!");
+			}
+		});
+
+		// Upload profile image without reload
+		document.getElementById("uploadForm").addEventListener("submit", async function (e) {
+			e.preventDefault();
+			const formData = new FormData(this);
+			const res = await fetch("/profile/upload", {
+				method: "POST",
+				body: formData
+			});
+			if (res.ok) {
+				location.reload();
+			}
+		});
+
+		// Toggle Like
+		async function toggleLike(postId) {
+			const res = await fetch(`/api/likes/${postId}`, {method: 'POST'});
+			if (res.ok) {
+				const newCount = await res.text();
+				document.getElementById(`like-count-${postId}`).innerText = newCount;
+			} else {
+				alert("Failed to like/unlike");
+			}
+		}
+	</script>
 </body>
 
 </html>

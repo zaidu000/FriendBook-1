@@ -35,7 +35,7 @@ public class PostController {
 	public String createPost(@RequestParam String caption, @RequestParam MultipartFile image, Principal principal)
 			throws IOException {
 		postService.createPost(caption, image, principal.getName());
-		return "redirect:/posts";
+		return "redirect:/profile";
 	}
 
 	@PostMapping("/posts/delete/{postId}")

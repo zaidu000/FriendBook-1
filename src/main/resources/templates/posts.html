@@ -18,10 +18,84 @@
 		<img th:src="@{'/posts/' + ${post.imagePath}}" width="200" />
 		<p>Posted by: <span th:text="${post.user.getUsernameField()}"></span></p>
 		<p>Date: <span th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm')}"></span></p>
+		<div>
+			<span th:id="'like-count-' + ${post.id}" th:text="${post.likeCount}">0</span> Likes
+			<button type="button" th:id="'like-btn-' + ${post.id}" th:attr="onclick=|toggleLike(${post.id})|">
+				Like/Unlike
+			</button>
+		</div>
+		<!-- Comment Section -->
+		   <div>
+		       <h5>Comments</h5>
+		       <div th:if="${post.comments}">
+		           <div th:each="comment : ${post.comments}">
+		               <p><b th:text="${comment.user.getUsernameField()}">Username</b>: 
+		                  <span th:text="${comment.text}">Content</span></p>
+		           </div>
+		       </div>
+		   </div>
+
+		   <!-- Comment Form -->
+		   <form th:action="@{'/comments/' + ${post.id}}" method="post">
+		       <input type="text" name="content" placeholder="Add a comment" required />
+		       <button type="submit">Comment</button>
+		   </form>
 
 		<hr>
 	</div>
 	<a th:href="@{/profile}">Back to Profile</a>
+
+
+	<script>
+		async function toggleLike(postId) {
+			const res = await fetch(`/api/likes/${postId}`, {method: 'POST'});
+			if (res.ok) {
+				const newCount = await res.text();
+				document.getElementById(`like-count-${postId}`).innerText = newCount;
+			} else {
+				alert("Failed to like/unlike");
+			}
+		}
+
+		async function submitComment(event, postId) {
+			event.preventDefault();
+			const input = event.target.querySelector('input[name="comment"]');
+			const text = input.value;
+
+			const res = await fetch(`/api/comments/${postId}`, {
+				method: 'POST',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				body: new URLSearchParams({text})
+			});
+
+			if (res.ok) {
+				input.value = '';
+				loadComments(postId);
+			}
+		}
+
+		async function loadComments(postId) {
+			const res = await fetch(`/api/comments/${postId}`);
+			if (res.ok) {
+				const comments = await res.json();
+				const container = document.getElementById(`comments-${postId}`);
+				container.innerHTML = '';
+				comments.forEach(c => {
+					const div = document.createElement('div');
+					div.innerHTML = `<b>${c.user.username}:</b> ${c.text}`;
+					container.appendChild(div);
+				});
+			}
+		}
+
+		// Auto-load comments for all posts on page load
+		document.addEventListener("DOMContentLoaded", () => {
+			document.querySelectorAll("[id^='comments-']").forEach(div => {
+				const postId = div.id.split('-')[1];
+				loadComments(postId);
+			});
+		});
+	</script>
 </body>
 
 </html>

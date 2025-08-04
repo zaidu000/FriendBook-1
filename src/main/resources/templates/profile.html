@@ -49,6 +49,12 @@
 	<div th:each="post : ${userPosts}">
 		<h4 th:text="${post.caption}"></h4>
 		<img th:src="@{'/posts/' + ${post.imagePath}}" width="150" />
+		<div>
+			<span th:id="'like-count-' + ${post.id}" th:text="${post.likeCount}">0</span> Likes
+			<button type="button" th:id="'like-btn-' + ${post.id}" th:attr="onclick=|toggleLike(${post.id})|">
+				Like/Unlike
+			</button>
+		</div>
 		<form th:action="@{'/posts/delete/' + ${post.id}}" method="post">
 			<button type="submit">Delete</button>
 		</form>
@@ -73,6 +79,16 @@
 				alert("Something went wrong!");
 			}
 		}
+		
+		async function toggleLike(postId) {
+		        const res = await fetch(`/api/likes/${postId}`, { method: 'POST' });
+		        if (res.ok) {
+		            const newCount = await res.text();
+		            document.getElementById(`like-count-${postId}`).innerText = newCount;
+		        } else {
+		            alert("Failed to like/unlike");
+		        }
+		    }
 	</script>
 
 	<a th:href="@{/logout}">Logout</a>

@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.friendbook.model.Post;
 import com.friendbook.model.User;
+import com.friendbook.repository.LikeRepository;
 import com.friendbook.repository.PostRepository;
 import com.friendbook.repository.UserRepository;
 
@@ -24,6 +25,9 @@ public class PostService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private LikeRepository likeRepository;
 	
 	public void createPost(String caption, MultipartFile image, String userEmail) throws IOException{
 		User user = userRepository.findByEmail(userEmail).orElse(null);
@@ -41,7 +45,9 @@ public class PostService {
 	}
 	
 	public List<Post> getAllPosts(){
-		return postRepository.findAllByOrderByCreatedAtDesc();
+		List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
+		posts.forEach(post -> post.getComments().size());
+		return posts;
 	}
 	
 	public List<Post> getUserPosts(User user){
@@ -68,6 +74,11 @@ public class PostService {
 			post.setCaption(newCaption);
 			postRepository.save(post);
 		}
+	}
+	
+	public Long getLikeCount(Long postId) {
+		Post post = postRepository.findById(postId).orElse(null);
+		return post != null ? likeRepository.countByPost(post) : 0;
 	}
 	
 }

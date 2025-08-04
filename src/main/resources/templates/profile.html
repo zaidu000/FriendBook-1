@@ -6,19 +6,20 @@
 </head>
 
 <body>
+
 	<h2>Welcome, <span th:text="${user.fullName}"></span></h2>
 	<p>Username: <span th:text="${user.getUsernameField()}"></span></p>
 	<p>Email: <span th:text="${user.email}"></span></p>
 
 	<!-- Profile Image -->
 	<img th:src="@{'/images/' + ${user.profileImage}}" alt="Profile Image" width="100" height="100" />
-	<form th:action="@{/profile/upload}" method="post" enctype="multipart/form-data">
+	<form th:action="@{/profile/upload}" method="post" enctype="multipart/form-data" th:if="${!viewingOtherUser}">
 		<input type="file" name="image">
 		<button type="submit">Upload Profile Image</button>
 	</form>
 
 	<!-- Favorite Fields -->
-	<form th:action="@{/profile/update}" method="post">
+	<form th:action="@{/profile/update}" method="post" th:if="${!viewingOtherUser}">
 		<label>Favorite Songs:</label><br>
 		<input type="text" name="favSongs" th:value="${user.favSongs}" /><br>
 
@@ -30,6 +31,37 @@
 
 		<button type="submit">Save</button>
 	</form>
+
+	<!-- Followers / Following Count -->
+	<p>Followers: <span th:text="${followersCount}">0</span></p>
+	<p>Following: <span th:text="${followingCount}">0</span></p>
+
+	<!-- Follow/Unfollow Button (only shown if viewing another user's profile) -->
+	<div id="followSection" th:if="${viewingOtherUser}">
+		<button id="followBtn" th:attr="data-following=${isFollowing}" onclick="toggleFollow()">
+			<span th:text="${isFollowing} ? 'Unfollow' : 'Follow'">Follow</span>
+		</button>
+	</div>
+
+	<script>
+		let isFollowing = /*[[${isFollowing}]]*/ false;
+		const targetUserId = /*[[${user.id}]]*/ 0;
+
+		async function toggleFollow() {
+			const method = isFollowing ? 'DELETE' : 'POST';
+			const response = await fetch(`/api/follow/${targetUserId}`, {method});
+
+			if (response.ok) {
+				isFollowing = !isFollowing;
+				const btn = document.getElementById("followBtn");
+				btn.innerText = isFollowing ? "Unfollow" : "Follow";
+				alert(isFollowing ? "Followed!" : "Unfollowed!");
+				location.reload(); // refresh to update count
+			} else {
+				alert("Something went wrong!");
+			}
+		}
+	</script>
 
 	<a th:href="@{/logout}">Logout</a>
 </body>

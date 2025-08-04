@@ -7,12 +7,6 @@
 
 <body>
 	<h2>All Posts</h2>
-	<form th:action="@{/posts/create}" method="post" enctype="multipart/form-data">
-		<input type="text" name="caption" placeholder="Caption" required><br>
-		<input type="file" name="image" required><br>
-		<button type="submit">Post</button>
-	</form>
-
 	<div th:each="post : ${posts}">
 		<h3 th:text="${post.caption}"></h3>
 		<img th:src="@{'/posts/' + ${post.imagePath}}" width="200" />

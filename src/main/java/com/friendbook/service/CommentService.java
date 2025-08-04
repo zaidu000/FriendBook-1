@@ -1,5 +1,6 @@
 package com.friendbook.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,15 @@ public class CommentService {
 		return post != null ? commentRepository.findByPostOrderByCreatedAtAsc(post) : List.of();
 	}
 
-	public void addComment(String userEmail, Long postId, String text) {
-		User user = userRepository.findByEmail(userEmail).orElse(null);
-		Post post = postRepository.findById(postId).orElse(null);
-		if (user != null && post != null && !text.trim().isEmpty()) {
-			Comment c = new Comment();
-			c.setUser(user);
-			c.setPost(post);
-			c.setText(text);
-			commentRepository.save(c);
-		}
+	public void saveComment(Long postId, User user, String text) {
+		Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+
+		Comment comment = new Comment();
+		comment.setText(text);
+		comment.setPost(post);
+		comment.setUser(user);
+		comment.setCreatedAt(LocalDateTime.now());
+		commentRepository.save(comment);
 	}
+
 }

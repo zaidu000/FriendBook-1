@@ -43,6 +43,18 @@
 		</button>
 	</div>
 
+	<a th:href="@{/posts}">View All Posts</a>
+
+	<h3>Your Posts</h3>
+	<div th:each="post : ${userPosts}">
+		<h4 th:text="${post.caption}"></h4>
+		<img th:src="@{'/posts/' + ${post.imagePath}}" width="150" />
+		<form th:action="@{'/posts/delete/' + ${post.id}}" method="post">
+			<button type="submit">Delete</button>
+		</form>
+		<a th:href="@{'/posts/edit/' + ${post.id}}">Edit</a>
+	</div>
+
 	<script>
 		let isFollowing = /*[[${isFollowing}]]*/ false;
 		const targetUserId = /*[[${user.id}]]*/ 0;

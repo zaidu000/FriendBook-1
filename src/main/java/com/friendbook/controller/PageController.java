@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.friendbook.model.User;
 import com.friendbook.repository.UserRepository;
 import com.friendbook.service.FollowService;
+import com.friendbook.service.PostService;
 
 @Controller
 public class PageController {
@@ -28,6 +29,9 @@ public class PageController {
 
 	@Autowired
 	private FollowService followService;
+	
+	@Autowired
+	private PostService postService;
 
 	@GetMapping("/signup")
 	public String showSignupPage() {
@@ -52,6 +56,7 @@ public class PageController {
 		model.addAttribute("followingCount", followService.countFollowings(user));
 		model.addAttribute("viewingOtherUser", false);
 		model.addAttribute("loggedInUserId", user.getId());
+		model.addAttribute("userPosts", postService.getUserPosts(user));
 		return "profile";
 	}
 

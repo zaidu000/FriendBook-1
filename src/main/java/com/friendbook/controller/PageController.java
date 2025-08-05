@@ -57,8 +57,8 @@ public class PageController {
 	public String showProfilePage(Model model, Principal principal) {
 		User user = userRepo.findByEmail(principal.getName()).orElse(null);
 		model.addAttribute("user", user);
-		model.addAttribute("followersCount", followService.countFollowers(user));
-		model.addAttribute("followingCount", followService.countFollowings(user));
+		model.addAttribute("followersCount", user.getFollowers().size());
+		model.addAttribute("followingCount", user.getFollowing().size());
 		model.addAttribute("viewingOtherUser", false);
 		model.addAttribute("loggedInUserId", user.getId());
 		model.addAttribute("userPosts", postService.getUserPosts(user));

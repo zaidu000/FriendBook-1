@@ -2,6 +2,9 @@ package com.friendbook.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.friendbook.model.Post;
+import com.friendbook.model.User;
+import com.friendbook.repository.PostRepository;
 import com.friendbook.repository.UserRepository;
 import com.friendbook.service.PostService;
 
@@ -24,10 +29,21 @@ public class PostController {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PostRepository postRepository;
 
 	@GetMapping("/posts")
 	public String viewAllPosts(Model model, Principal principal) {
-		model.addAttribute("posts", postService.getAllPosts());
+		User currentUser = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+		Set<User> following = currentUser.getFollowing();
+		Set<User> usersToFetchfrom = new HashSet<>(following);
+		usersToFetchfrom.add(currentUser);
+		
+		List<Post> posts = postRepository.findByUserInOrderByCreatedAtDesc(usersToFetchfrom);
+		
+		model.addAttribute("posts", posts);
+		model.addAttribute("user", currentUser);
 		return "posts";
 	}
 

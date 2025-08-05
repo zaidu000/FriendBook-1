@@ -84,11 +84,10 @@
 			margin-top: 10px;
 		}
 	</style>
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
-
-	<!-- Navbar -->
 	<div class="navbar">
 		<h1>FriendBook</h1>
 		<div class="nav-links">
@@ -99,30 +98,43 @@
 		</div>
 	</div>
 
-	<!-- Signup Form -->
 	<div class="signup-container">
 		<h2>Register</h2>
 		<form id="signupForm">
 			<input type="text" id="fullName" placeholder="Full Name" required><br>
 			<input type="email" id="email" placeholder="Email" required><br>
 			<input type="password" id="password" placeholder="Password" required><br>
+			<div class="g-recaptcha" data-sitekey="6LcQgJsrAAAAAIh7ctqhSrxCrksu6TL2lvFWp15O"></div>
 			<button type="submit">Signup</button>
 		</form>
 		<div id="message"></div>
 	</div>
 
-	<!-- JavaScript Logic (Unchanged) -->
+	<div th:if="${error}" style="color: red;">
+		<p th:text="${error}"></p>
+	</div>
+
 	<script>
 		document.getElementById("signupForm").addEventListener("submit", function (e) {
 			e.preventDefault();
+
+			const recaptchaResponse = grecaptcha.getResponse();
+			if (!recaptchaResponse) {
+				document.getElementById("message").innerText = "Please complete the CAPTCHA.";
+				document.getElementById("message").style.color = "red";
+				return;
+			}
+
 			const data = {
 				fullName: document.getElementById("fullName").value,
 				email: document.getElementById("email").value,
-				password: document.getElementById("password").value
+				password: document.getElementById("password").value,
+				captchaToken: recaptchaResponse
 			};
+
 			fetch("/api/signup", {
 				method: "POST",
-				headers: {"Content-Type": "application/json"},
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(data)
 			})
 				.then(res => res.json())
@@ -134,7 +146,6 @@
 				});
 		});
 	</script>
-
 </body>
 
 </html>

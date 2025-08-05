@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>User Profile</title>
+	<style>
+		.card {
+			max-width: 600px;
+			margin: 30px auto;
+			background: white;
+			padding: 20px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			border-radius: 10px;
+			text-align: center;
+		}
+
+		img {
+			width: 120px;
+			height: 120px;
+			border-radius: 50%;
+			object-fit: cover;
+		}
+
+		.button {
+			padding: 10px 20px;
+			background-color: #007bff;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			margin-top: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="card">
+		<img th:src="@{'/images/' + ${user.profileImage}}" alt="Profile Image">
+		<h2 th:text="${user.fullName}">Name</h2>
+		<p><strong>Username:</strong> <span th:text="${user.username}">username</span></p>
+		<p><strong>Posts:</strong> <span th:text="${posts.size()}">0</span></p>
+		<p><strong>Followers:</strong> <span th:text="${followersCount}">0</span></p>
+		<p><strong>Following:</strong> <span th:text="${followingCount}">0</span></p>
+
+		<form th:action="@{'/follow/' + ${user.username}}" method="post">
+			<button type="submit" class="button" th:text="${isFollowing ? 'Following' : 'Follow'}"></button>
+		</form>
+	</div>
+</body>
+
+</html>

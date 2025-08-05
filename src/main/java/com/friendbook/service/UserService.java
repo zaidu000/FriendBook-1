@@ -1,5 +1,7 @@
 package com.friendbook.service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +40,21 @@ public class UserService {
 	public User getUserByUsername(String username) {
 		return userRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
+
+	public List<User> searchUsersByKeyword(String keyword) {
+		return userRepo.searchByUsername(keyword);
+	}
+
+	public Optional<User> getUserByUsername1(String username) {
+		return userRepo.findByUsername(username);
+	}
+	
+	public void save(User user) {
+		userRepo.save(user);
+	}
+	
+	public List<User> searchUsersByUsername(String keyword) {
+	    return userRepo.findByUsernameContainingIgnoreCase(keyword);
+	}
+
 }

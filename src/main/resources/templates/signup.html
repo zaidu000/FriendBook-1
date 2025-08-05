@@ -3,87 +3,7 @@
 
 <head>
 	<title>Signup - FriendBook</title>
-	<style>
-		body {
-			margin: 0;
-			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-			background-color: #f0f2f5;
-		}
-
-		.navbar {
-			background-color: #ffffff;
-			padding: 15px 30px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-
-		.navbar h1 {
-			margin: 0;
-			font-size: 24px;
-			color: #333;
-		}
-
-		.nav-links a {
-			text-decoration: none;
-			color: #333;
-			margin-left: 20px;
-			font-weight: 500;
-			transition: color 0.3s;
-		}
-
-		.nav-links a:hover {
-			color: #007bff;
-		}
-
-		.signup-container {
-			width: 100%;
-			max-width: 400px;
-			margin: 80px auto;
-			background: #ffffff;
-			padding: 40px;
-			border-radius: 10px;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		}
-
-		.signup-container h2 {
-			text-align: center;
-			margin-bottom: 30px;
-			color: #333;
-		}
-
-		.signup-container input {
-			width: 100%;
-			padding: 12px;
-			margin-bottom: 20px;
-			border: 1px solid #ddd;
-			border-radius: 5px;
-			font-size: 14px;
-		}
-
-		.signup-container button {
-			width: 100%;
-			padding: 12px;
-			background-color: #28a745;
-			color: white;
-			border: none;
-			font-size: 16px;
-			border-radius: 5px;
-			cursor: pointer;
-			transition: background-color 0.3s;
-		}
-
-		.signup-container button:hover {
-			background-color: #218838;
-		}
-
-		#message {
-			text-align: center;
-			font-weight: bold;
-			margin-top: 10px;
-		}
-	</style>
+	<link rel="stylesheet" th:href="@{/css/signup.css}" />
 	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
@@ -114,38 +34,7 @@
 		<p th:text="${error}"></p>
 	</div>
 
-	<script>
-		document.getElementById("signupForm").addEventListener("submit", function (e) {
-			e.preventDefault();
-
-			const recaptchaResponse = grecaptcha.getResponse();
-			if (!recaptchaResponse) {
-				document.getElementById("message").innerText = "Please complete the CAPTCHA.";
-				document.getElementById("message").style.color = "red";
-				return;
-			}
-
-			const data = {
-				fullName: document.getElementById("fullName").value,
-				email: document.getElementById("email").value,
-				password: document.getElementById("password").value,
-				captchaToken: recaptchaResponse
-			};
-
-			fetch("/api/signup", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(data)
-			})
-				.then(res => res.json())
-				.then(response => {
-					const msg = document.getElementById("message");
-					msg.style.color = response.success ? "green" : "red";
-					msg.innerText = response.message;
-					if (response.success) setTimeout(() => window.location.href = "/login", 1500);
-				});
-		});
-	</script>
+	<script th:src="@{/js/signup.js}"></script>
 </body>
 
 </html>

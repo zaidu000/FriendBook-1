@@ -3,40 +3,7 @@
 
 <head>
 	<title>User Profile</title>
-	<style>
-		.card {
-			max-width: 600px;
-			margin: 30px auto;
-			background: white;
-			padding: 20px;
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-			border-radius: 10px;
-			text-align: center;
-		}
-
-		img {
-			width: 120px;
-			height: 120px;
-			border-radius: 50%;
-			object-fit: cover;
-		}
-
-		.button {
-			padding: 10px 20px;
-			background-color: #007bff;
-			color: white;
-			border: none;
-			border-radius: 5px;
-			cursor: pointer;
-			margin-top: 10px;
-			transition: background-color 0.3s;
-		}
-
-		.button:disabled {
-			background-color: #999;
-			cursor: not-allowed;
-		}
-	</style>
+	<link rel="stylesheet" th:href="@{/css/user-card.css}" />
 </head>
 
 <body>
@@ -55,33 +22,7 @@
 		</button>
 	</div>
 
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-			const btn = document.querySelector(".send-request-btn");
-
-			if (btn && btn.textContent === "Send Request") {
-				btn.addEventListener("click", function () {
-					const username = this.getAttribute("data-username");
-
-					fetch(`/friend-request/send/${username}`, {
-						method: "POST"
-					})
-						.then(res => {
-							if (res.ok) {
-								this.textContent = "Request Sent";
-								this.disabled = true;
-							} else {
-								alert("Failed to send friend request.");
-							}
-						})
-						.catch(error => {
-							console.error("Error sending friend request:", error);
-							alert("Something went wrong.");
-						});
-				});
-			}
-		});
-	</script>
+	<script th:src="@{/js/user-card.js}"></script>
 </body>
 
 </html>

@@ -1,84 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Notifications - Friend Requests</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-
-        .request {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #eee;
-            padding: 15px 0;
-        }
-
-        .request-info {
-            font-size: 16px;
-        }
-
-        .buttons form {
-            display: inline-block;
-        }
-
-        .buttons button {
-            padding: 6px 14px;
-            margin-left: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .accept-btn {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .decline-btn {
-            background-color: #dc3545;
-            color: white;
-        }
-    </style>
+	<title>Notifications - Friend Requests</title>
+	<meta charset="UTF-8" />
+	<link rel="stylesheet" th:href="@{/css/notifications.css}" />
 </head>
-<body>
-    <div class="container">
-        <h2>Friend Request Notifications</h2>
 
-		<div th:if="${pendingRequests != null and pendingRequests.isEmpty()}">
-		    No pending requests.
+<body>
+	<div class="navbar">
+		<h1>FriendBook</h1>
+		<div>
+			<a th:href="@{/profile}">Home</a>
+			<a th:href="@{/posts}">Feed</a>
+			<a th:href="@{/notifications}">Notifications</a>
+			<a th:href="@{/logout}">Logout</a>
 		</div>
+	</div>
+
+	<div class="container">
+		<h2>Friend Request Notifications</h2>
+
+		<div th:if="${pendingRequests != null and pendingRequests.isEmpty()}" class="no-requests">
+			You have no pending friend requests.
+		</div>
+
 		<div th:if="${pendingRequests != null and !pendingRequests.isEmpty()}">
-		    <ul>
-		        <li th:each="req : ${pendingRequests}">
-		            (<span th:text="${req.sender.fullName}">Sender Name</span>) sent you a friend request.
-		            <form th:action="@{'/friend-request/accept/' + ${req.sender.username}}" method="post">
-		                <button type="submit">Accept</button>
-		            </form>
-		            <form th:action="@{'/friend-request/decline/' + ${req.sender.username}}" method="post">
-		                <button type="submit">Decline</button>
-		            </form>
-		        </li>
-		    </ul>
+			<div th:each="req : ${pendingRequests}" class="request">
+				<div class="request-info">
+					<span th:text="${req.sender.fullName}">Sender Name</span> sent you a friend request.
+				</div>
+				<div class="buttons">
+					<form th:action="@{'/friend-request/accept/' + ${req.sender.username}}" method="post">
+						<button type="submit" class="accept-btn">Accept</button>
+					</form>
+					<form th:action="@{'/friend-request/decline/' + ${req.sender.username}}" method="post">
+						<button type="submit" class="decline-btn">Decline</button>
+					</form>
+				</div>
+			</div>
 		</div>
-    </div>
+	</div>
 </body>
+
 </html>

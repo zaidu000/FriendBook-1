@@ -1,0 +1,79 @@
+body {
+	margin: 0;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #f0f2f5;
+}
+
+.navbar {
+	background-color: #ffffff;
+	padding: 15px 30px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.navbar h1 {
+	margin: 0;
+	font-size: 24px;
+	color: #333;
+}
+
+.nav-links a {
+	text-decoration: none;
+	color: #333;
+	margin-left: 20px;
+	font-weight: 500;
+	transition: color 0.3s;
+}
+
+.nav-links a:hover {
+	color: #007bff;
+}
+
+.login-container {
+	width: 100%;
+	max-width: 400px;
+	margin: 80px auto;
+	background: #ffffff;
+	padding: 40px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+	text-align: center;
+	margin-bottom: 30px;
+	color: #333;
+}
+
+.login-container input {
+	width: 100%;
+	padding: 12px;
+	margin-bottom: 20px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	font-size: 14px;
+}
+
+.login-container button {
+	width: 100%;
+	padding: 12px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	font-size: 16px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.login-container button:hover {
+	background-color: #0056b3;
+}
+
+.error-message {
+	color: red;
+	text-align: center;
+	margin-top: 10px;
+}

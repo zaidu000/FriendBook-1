@@ -28,7 +28,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeHttpRequests()
-            .requestMatchers("/","/about","/signup", "/login", "/api/signup", "/about/**").permitAll()
+            .requestMatchers("/","/about","/signup", "/login", "/api/signup", "/about/**","/css/**","/js/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin().loginPage("/login").defaultSuccessUrl("/profile", true).permitAll()

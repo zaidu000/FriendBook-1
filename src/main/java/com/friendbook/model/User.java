@@ -1,5 +1,6 @@
 package com.friendbook.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -55,6 +56,13 @@ public class User implements UserDetails {
 
 	@ManyToMany(mappedBy = "followers")
 	private Set<User> following = new HashSet<>();
+
+	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FriendRequest> receivedRequests = new ArrayList<>();
+
+	// Friend requests sent
+	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FriendRequest> sentRequests = new ArrayList<>();
 
 	public String getProfileImage() {
 		return profileImage;

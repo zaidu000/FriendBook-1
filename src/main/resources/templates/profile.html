@@ -50,6 +50,24 @@
 			color: var(--primary);
 		}
 
+		.notification-icon {
+			position: relative;
+			font-size: 20px;
+			margin-left: 20px;
+			cursor: pointer;
+		}
+
+		.notification-count {
+			position: absolute;
+			top: -5px;
+			right: -10px;
+			background: red;
+			color: white;
+			border-radius: 50%;
+			padding: 2px 6px;
+			font-size: 12px;
+		}
+
 		.search-bar {
 			margin: 10px 30px;
 			text-align: right;
@@ -189,112 +207,111 @@
 			background-color: #ffc107;
 			color: black;
 		}
-		
+
 		.search-container {
-		    position: relative;
-		    width: 250px;
-		    margin-left: 20px;
+			position: relative;
+			width: 250px;
+			margin-left: 20px;
 		}
 
 		#userSearch {
-		    width: 100%;
-		    padding: 8px 12px;
-		    border-radius: 20px;
-		    border: 1px solid #ccc;
-		    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-		    transition: all 0.3s ease;
+			width: 100%;
+			padding: 8px 12px;
+			border-radius: 20px;
+			border: 1px solid #ccc;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+			transition: all 0.3s ease;
 		}
 
 		#userSearch:focus {
-		    border-color: #007bff;
-		    outline: none;
+			border-color: #007bff;
+			outline: none;
 		}
 
 		#suggestions {
-		    position: absolute;
-		    top: 40px;
-		    left: 0;
-		    right: 0;
-		    background-color: white;
-		    border: 1px solid #ccc;
-		    border-radius: 8px;
-		    max-height: 200px;
-		    overflow-y: auto;
-		    z-index: 999;
-		    display: none;
+			position: absolute;
+			top: 40px;
+			left: 0;
+			right: 0;
+			background-color: white;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			max-height: 200px;
+			overflow-y: auto;
+			z-index: 999;
+			display: none;
 			width: 200px;
 		}
 
 		.suggestion-item {
-		    padding: 10px;
-		    cursor: pointer;
-		    border-bottom: 1px solid #eee;
+			padding: 10px;
+			cursor: pointer;
+			border-bottom: 1px solid #eee;
 		}
 
 		.suggestion-item:last-child {
-		    border-bottom: none;
+			border-bottom: none;
 		}
 
 		.suggestion-item:hover {
-		    background-color: #f0f0f0;
+			background-color: #f0f0f0;
 		}
-		
+
 		#search-box {
-		    padding: 6px;
-		    width: 200px;
-		    border-radius: 4px;
-		    border: 1px solid #ccc;
+			padding: 6px;
+			width: 200px;
+			border-radius: 4px;
+			border: 1px solid #ccc;
 		}
 
 		.suggestion-box {
-		    background: white;
-		    border: 1px solid #ccc;
-		    position: absolute;
-		    width: 200px;
-		    z-index: 1000;
-		    max-height: 200px;
-		    overflow-y: auto;
+			background: white;
+			border: 1px solid #ccc;
+			position: absolute;
+			width: 200px;
+			z-index: 1000;
+			max-height: 200px;
+			overflow-y: auto;
 		}
 
 		.suggestion-box div {
-		    padding: 8px;
-		    cursor: pointer;
+			padding: 8px;
+			cursor: pointer;
 		}
 
 		.suggestion-box div:hover {
-		    background-color: #f0f0f0;
+			background-color: #f0f0f0;
 		}
 
 		/* Modal styling */
 		.modal {
-		    display: none;
-		    position: fixed;
-		    z-index: 9999;
-		    left: 0;
-		    top: 0;
-		    width: 100%;
-		    height: 100%;
-		    overflow: auto;
-		    background-color: rgba(0,0,0,0.4);
+			display: none;
+			position: fixed;
+			z-index: 9999;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
 		}
 
 		.modal-content {
-		    background-color: #fff;
-		    margin: 10% auto;
-		    padding: 20px;
-		    width: 400px;
-		    border-radius: 8px;
-		    position: relative;
+			background-color: #fff;
+			margin: 10% auto;
+			padding: 20px;
+			width: 400px;
+			border-radius: 8px;
+			position: relative;
 		}
 
 		.close-btn {
-		    position: absolute;
-		    right: 10px;
-		    top: 10px;
-		    font-size: 20px;
-		    cursor: pointer;
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			font-size: 20px;
+			cursor: pointer;
 		}
-
 	</style>
 </head>
 
@@ -305,6 +322,11 @@
 		<div class="nav-links">
 			<a th:href="@{/profile}">Home</a>
 			<a th:href="@{/posts}">Feed</a>
+			<a th:href="@{/notifications}" class="notification-icon">
+			<span class="notification-count" th:text="${pendingRequestsCount}"
+					th:if="${pendingRequestsCount > 0}"></span>
+			Notifications
+				</a>
 			<a th:href="@{/logout}">Logout</a>
 		</div>
 	</div>
@@ -314,17 +336,17 @@
 	    <input type="text" id="userSearch" placeholder="Search users..." oninput="searchUsers()" autocomplete="off" />
 	    <div id="suggestions"></div>
 	</div> -->
-	
+
 	<!-- Search Input -->
 	<input type="text" id="search-box" placeholder="Search users..." autocomplete="off" />
 	<div id="suggestions" class="suggestion-box"></div>
 
 	<!-- User Profile Modal -->
 	<div id="user-modal" class="modal">
-	    <div class="modal-content">
-	        <span class="close-btn" onclick="closeModal()">&times;</span>
-	        <div id="user-details"></div>
-	    </div>
+		<div class="modal-content">
+			<span class="close-btn" onclick="closeModal()">&times;</span>
+			<div id="user-details"></div>
+		</div>
 	</div>
 
 
@@ -440,51 +462,51 @@
 
 	<!-- JS: AJAX Logic -->
 	<script>
-		
+
 		document.getElementById("search-box").addEventListener("input", async function () {
-		    const query = this.value.trim();
-		    const suggestionBox = document.getElementById("suggestions");
+			const query = this.value.trim();
+			const suggestionBox = document.getElementById("suggestions");
 
-		    if (query === "") {
-		        suggestionBox.innerHTML = "";
-		        suggestionBox.style.display = "none"; // <- Important to hide
-		        return;
-		    }
+			if (query === "") {
+				suggestionBox.innerHTML = "";
+				suggestionBox.style.display = "none"; // <- Important to hide
+				return;
+			}
 
-		    try {
-		        const res = await fetch(`/api/search/users?query=${encodeURIComponent(query)}`);
-		        if (!res.ok) throw new Error("Failed to fetch");
-		        const users = await res.json();
+			try {
+				const res = await fetch(`/api/search/users?query=${encodeURIComponent(query)}`);
+				if (!res.ok) throw new Error("Failed to fetch");
+				const users = await res.json();
 
-		        suggestionBox.innerHTML = "";
-		        if (users.length === 0) {
-		            suggestionBox.style.display = "none";
-		            return;
-		        }
+				suggestionBox.innerHTML = "";
+				if (users.length === 0) {
+					suggestionBox.style.display = "none";
+					return;
+				}
 
-		        users.forEach(user => {
-		            const div = document.createElement("div");
-		            div.classList.add("suggestion-item");
-		            div.textContent = user.username;
-		            div.onclick = () => {
-		                suggestionBox.style.display = "none"; // hide
-		                loadUserModal(user.username);
-		            };
-		            suggestionBox.appendChild(div);
-		        });
+				users.forEach(user => {
+					const div = document.createElement("div");
+					div.classList.add("suggestion-item");
+					div.textContent = user.username;
+					div.onclick = () => {
+						suggestionBox.style.display = "none"; // hide
+						loadUserModal(user.username);
+					};
+					suggestionBox.appendChild(div);
+				});
 
-		        suggestionBox.style.display = "block"; // <- Make sure it's visible
+				suggestionBox.style.display = "block"; // <- Make sure it's visible
 
-		    } catch (err) {
-		        console.error("Error loading suggestions:", err);
-		    }
+			} catch (err) {
+				console.error("Error loading suggestions:", err);
+			}
 		});
 
 		async function loadUserModal(username) {
-		    const res = await fetch(`/api/user/${username}`);
-		    if (res.ok) {
-		        const data = await res.json();
-		        const html = `
+			const res = await fetch(`/api/user/${username}`);
+			if (res.ok) {
+				const data = await res.json();
+				const html = `
 		            <img src="/images/${data.profilePic}" width="80" style="border-radius:50%;" />
 		            <h3>${data.name}</h3>
 		            <p><strong>Username:</strong> ${data.username}</p>
@@ -496,18 +518,18 @@
 		            </form>
 		        `;
 
-		        document.getElementById("user-details").innerHTML = html;
-		        document.getElementById("user-modal").style.display = "block";
-		    } else {
-		        alert("Failed to load user");
-		    }
+				document.getElementById("user-details").innerHTML = html;
+				document.getElementById("user-modal").style.display = "block";
+			} else {
+				alert("Failed to load user");
+			}
 		}
 
 
 		function closeModal() {
-		    document.getElementById("user-modal").style.display = "none";
+			document.getElementById("user-modal").style.display = "none";
 		}
-				
+
 		async function submitComment(event, postId) {
 			event.preventDefault();
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.friendbook.model.User;
+import com.friendbook.service.FriendRequestService;
 import com.friendbook.service.PostService;
 import com.friendbook.service.UserService;
 
@@ -27,6 +28,9 @@ public class SearchController {
 	
 	@Autowired
 	private PostService postService;
+	
+	@Autowired
+	private FriendRequestService friendRequestService;
 	
 	@GetMapping("/api/search/users")
 	public ResponseEntity<List<Map<String, String>>> searchUsers(@RequestParam String query) {
@@ -52,6 +56,8 @@ public class SearchController {
 
         // check if current user follows this user
         User currentUser = userService.getUserByUsername1(principal.getName()).orElse(null);
+        String requestStatus = friendRequestService.getRequestStatus(currentUser, viewedUser);
+        model.addAttribute("requestStatus", requestStatus);
         boolean isFollowing = viewedUser.getFollowers().contains(currentUser);
         model.addAttribute("isFollowing", isFollowing);
 

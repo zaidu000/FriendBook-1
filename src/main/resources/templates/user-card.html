@@ -29,6 +29,12 @@
 			border-radius: 5px;
 			cursor: pointer;
 			margin-top: 10px;
+			transition: background-color 0.3s;
+		}
+
+		.button:disabled {
+			background-color: #999;
+			cursor: not-allowed;
 		}
 	</style>
 </head>
@@ -37,15 +43,45 @@
 	<div class="card">
 		<img th:src="@{'/images/' + ${user.profileImage}}" alt="Profile Image">
 		<h2 th:text="${user.fullName}">Name</h2>
-		<p><strong>Username:</strong> <span th:text="${user.username}">username</span></p>
+		<p><strong>Username:</strong> <span th:text="${user.usernameField}">username</span></p>
 		<p><strong>Posts:</strong> <span th:text="${posts.size()}">0</span></p>
 		<p><strong>Followers:</strong> <span th:text="${followersCount}">0</span></p>
 		<p><strong>Following:</strong> <span th:text="${followingCount}">0</span></p>
 
-		<form th:action="@{'/follow/' + ${user.username}}" method="post">
-			<button type="submit" class="button" th:text="${isFollowing ? 'Following' : 'Follow'}"></button>
-		</form>
+		<!-- Send Friend Request Button (AJAX-based, no form tag) -->
+		<button class="button send-request-btn" th:data-username="${user.usernameField}"
+			th:disabled="${requestStatus == 'pending' or requestStatus == 'accepted'}"
+			th:text="${requestStatus == 'pending' ? 'Request Sent' : (requestStatus == 'accepted' ? 'Friends' : 'Send Request')}">
+		</button>
 	</div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const btn = document.querySelector(".send-request-btn");
+
+			if (btn && btn.textContent === "Send Request") {
+				btn.addEventListener("click", function () {
+					const username = this.getAttribute("data-username");
+
+					fetch(`/friend-request/send/${username}`, {
+						method: "POST"
+					})
+						.then(res => {
+							if (res.ok) {
+								this.textContent = "Request Sent";
+								this.disabled = true;
+							} else {
+								alert("Failed to send friend request.");
+							}
+						})
+						.catch(error => {
+							console.error("Error sending friend request:", error);
+							alert("Something went wrong.");
+						});
+				});
+			}
+		});
+	</script>
 </body>
 
 </html>

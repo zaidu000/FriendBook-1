@@ -14,54 +14,48 @@ import com.friendbook.repository.FriendRequestRepository;
 public class FriendRequestService {
 
 	@Autowired
-	private FriendRequestRepository repo;
-	
-	@Autowired
-	private UserService userService;
-	
+	private FriendRequestRepository friendRequestRepository;
+
 	public String getRequestStatus(User sender, User receiver) {
-        if (sender == null || receiver == null) {
-            return null;
-        }
-
-        Optional<FriendRequest> request = repo.findBySenderAndReceiver(sender, receiver);
-
-        if (request.isPresent()) {
-            return request.get().getStatus();
-        }
-
-        return null;
-    }
+		if (sender == null || receiver == null) {
+			return null;
+		}
+		Optional<FriendRequest> request = friendRequestRepository.findBySenderAndReceiver(sender, receiver);
+		if (request.isPresent()) {
+			return request.get().getStatus();
+		}
+		return null;
+	}
 
 	public void sendRequest(User sender, User receiver) {
-		if (repo.existsBySenderAndReceiver(sender, receiver)) {
-	        throw new RuntimeException("Request already sent");
-	    }
-        FriendRequest request = new FriendRequest();
-        request.setSender(sender);
-        request.setReceiver(receiver);
-        request.setAccepted(false);
-        request.setStatus("pending");
-        repo.save(request);
-    }
-	
-    public List<FriendRequest> getPendingRequests(User user) {
-        return repo.findByReceiverAndAcceptedFalse(user);
-    }
+		if (friendRequestRepository.existsBySenderAndReceiver(sender, receiver)) {
+			throw new RuntimeException("Request already sent");
+		}
+		FriendRequest request = new FriendRequest();
+		request.setSender(sender);
+		request.setReceiver(receiver);
+		request.setAccepted(false);
+		request.setStatus("pending");
+		friendRequestRepository.save(request);
+	}
 
-    public void acceptRequest(Long requestId) {
-        FriendRequest req = repo.findById(requestId).orElseThrow();
-        req.setAccepted(true);
-        req.getSender().getFollowing().add(req.getReceiver());
-        req.getReceiver().getFollowers().add(req.getSender());
-        repo.save(req);
-    }
+	public List<FriendRequest> getPendingRequests(User user) {
+		return friendRequestRepository.findByReceiverAndAcceptedFalse(user);
+	}
 
-    public void declineRequest(Long requestId) {
-        repo.deleteById(requestId);
-    }
+	public void acceptRequest(Long requestId) {
+		FriendRequest req = friendRequestRepository.findById(requestId).orElseThrow();
+		req.setAccepted(true);
+		req.getSender().getFollowing().add(req.getReceiver());
+		req.getReceiver().getFollowers().add(req.getSender());
+		friendRequestRepository.save(req);
+	}
 
-    public boolean alreadyRequested(User sender, User receiver) {
-        return repo.findBySenderAndReceiver(sender, receiver).isPresent();
-    }
+	public void declineRequest(Long requestId) {
+		friendRequestRepository.deleteById(requestId);
+	}
+
+	public boolean alreadyRequested(User sender, User receiver) {
+		return friendRequestRepository.findBySenderAndReceiver(sender, receiver).isPresent();
+	}
 }

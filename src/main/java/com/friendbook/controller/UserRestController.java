@@ -17,6 +17,7 @@ import com.friendbook.utility.SignupResponse;
 @RestController
 @RequestMapping("/api")
 public class UserRestController {
+	
 	@Autowired
 	private UserService userService;
 
@@ -38,9 +39,11 @@ public class UserRestController {
 		user.setPassword(dto.password);
 
 		boolean ok = userService.registerUser(user);
-		if (ok)
+		if (ok) {
 			return ResponseEntity.ok(new SignupResponse(true, "Signup successful!"));
-		else
+		}
+		else {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new SignupResponse(false, "Email exists."));
+		}
 	}
 }

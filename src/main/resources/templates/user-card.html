@@ -15,7 +15,7 @@
 		<p><strong>Followers:</strong> <span th:text="${followersCount}">0</span></p>
 		<p><strong>Following:</strong> <span th:text="${followingCount}">0</span></p>
 
-		<!-- Send Friend Request Button (AJAX-based, no form tag) -->
+		<!-- Send Friend Request Button-->
 		<button class="button send-request-btn" th:data-username="${user.usernameField}"
 			th:disabled="${requestStatus == 'pending' or requestStatus == 'accepted'}"
 			th:text="${requestStatus == 'pending' ? 'Request Sent' : (requestStatus == 'accepted' ? 'Friends' : 'Send Request')}">

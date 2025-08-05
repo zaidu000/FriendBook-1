@@ -32,6 +32,16 @@ public class PageController {
 	
 	@Autowired
 	private PostService postService;
+	
+	@GetMapping("/")
+	public String showHomePage() {
+		return "index";
+	}
+	
+	@GetMapping("/about")
+	public String showAboutPage() {
+		return "about";
+	}
 
 	@GetMapping("/signup")
 	public String showSignupPage() {
@@ -41,16 +51,6 @@ public class PageController {
 	@GetMapping("/login")
 	public String showLoginPage() {
 		return "login";
-	}
-
-	@GetMapping("/")
-	public String showHomePage() {
-		return "index";
-	}
-	
-	@GetMapping("/about")
-	public String showAboutPage() {
-		return "about";
 	}
 
 	@GetMapping("/profile")

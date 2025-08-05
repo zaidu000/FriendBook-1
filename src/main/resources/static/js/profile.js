@@ -112,7 +112,7 @@ document.getElementById("createPostForm").addEventListener("submit", async funct
 		msg.style.color = "green";
 		form.reset();
 		setTimeout(() => {
-			location.reload(); // You can replace with dynamic DOM update later
+			location.reload(); 
 		}, 1000);
 	} else {
 		msg.innerText = "Failed to create post!";
@@ -134,7 +134,7 @@ function cancelEdit(postId) {
 // Handle Edit Submit (Prevent page reload)
 async function handleEditSubmit(event, form) {
 	event.preventDefault();
-	const postId = form.action.split("/").pop(); // last part of URL
+	const postId = form.action.split("/").pop(); 
 	const formData = new FormData(form);
 	const caption = formData.get("caption");
 
@@ -146,7 +146,7 @@ async function handleEditSubmit(event, form) {
 	if (res.ok) {
 		alert("Post updated!");
 		form.style.display = "none";
-		location.reload(); // or update the caption dynamically
+		location.reload(); 
 	} else {
 		alert("Failed to update post.");
 	}

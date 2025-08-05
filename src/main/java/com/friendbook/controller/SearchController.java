@@ -18,16 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.friendbook.model.User;
 import com.friendbook.service.FriendRequestService;
-import com.friendbook.service.PostService;
 import com.friendbook.service.UserService;
 
 @Controller
 public class SearchController {
-	@Autowired
-	private UserService userService;
 	
 	@Autowired
-	private PostService postService;
+	private UserService userService;
 	
 	@Autowired
 	private FriendRequestService friendRequestService;
@@ -45,7 +42,7 @@ public class SearchController {
     public String viewUserProfile(@PathVariable String username, Model model, Principal principal) {
         Optional<User> userOpt = userService.getUserByUsername1(username);
         if (userOpt.isEmpty()) {
-            return "error"; // handle gracefully
+            return "error";
         }
 
         User viewedUser = userOpt.get();

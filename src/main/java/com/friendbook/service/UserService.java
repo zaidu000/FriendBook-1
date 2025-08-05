@@ -15,18 +15,19 @@ import com.friendbook.repository.UserRepository;
 
 @Service
 public class UserService {
+	
 	@Autowired
-	private UserRepository userRepo;
+	private UserRepository userRepository;
 
 	private PasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	public boolean registerUser(User user) {
-		if (userRepo.existsByEmail(user.getEmail()))
+		if (userRepository.existsByEmail(user.getEmail())) {
 			return false;
+		}
 		user.setUsername(generateUsername(user.getFullName()));
 		user.setPassword(encoder.encode(user.getPassword()));
-		System.out.println("Encrypted password saved: " + user.getPassword());
-		userRepo.save(user);
+		userRepository.save(user);
 		return true;
 	}
 
@@ -38,23 +39,23 @@ public class UserService {
 	}
 
 	public User getUserByUsername(String username) {
-		return userRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+		return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
 
 	public List<User> searchUsersByKeyword(String keyword) {
-		return userRepo.searchByUsername(keyword);
+		return userRepository.searchByUsername(keyword);
 	}
 
 	public Optional<User> getUserByUsername1(String username) {
-		return userRepo.findByUsername(username);
+		return userRepository.findByUsername(username);
 	}
 	
 	public void save(User user) {
-		userRepo.save(user);
+		userRepository.save(user);
 	}
 	
 	public List<User> searchUsersByUsername(String keyword) {
-	    return userRepo.findByUsernameContainingIgnoreCase(keyword);
+	    return userRepository.findByUsernameContainingIgnoreCase(keyword);
 	}
 
 }

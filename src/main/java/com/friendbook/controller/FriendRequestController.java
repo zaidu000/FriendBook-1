@@ -49,7 +49,7 @@ public class FriendRequestController {
 	        requestService.sendRequest(sender, receiver);
 	        return ResponseEntity.ok("Friend request sent");
 	    } catch (Exception e) {
-	        e.printStackTrace(); // This helps you see the error in console
+	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending request");
 	    }
 	}

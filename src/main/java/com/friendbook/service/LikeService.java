@@ -31,7 +31,7 @@ public class LikeService {
 		if (user != null && post != null) {
 			boolean liked = likeRepository.existsByUserAndPost(user, post);
 			if (liked) {
-				likeRepository.deleteByUserAndPost(user, post); // <-- needs transaction
+				likeRepository.deleteByUserAndPost(user, post);
 			} else {
 				PostLike like = new PostLike();
 				like.setUser(user);

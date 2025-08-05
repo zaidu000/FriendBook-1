@@ -11,16 +11,12 @@ import com.friendbook.model.Post;
 import com.friendbook.model.User;
 import com.friendbook.repository.CommentRepository;
 import com.friendbook.repository.PostRepository;
-import com.friendbook.repository.UserRepository;
 
 @Service
 public class CommentService {
 
 	@Autowired
 	private CommentRepository commentRepository;
-
-	@Autowired
-	private UserRepository userRepository;
 
 	@Autowired
 	private PostRepository postRepository;
@@ -40,5 +36,4 @@ public class CommentService {
 		comment.setCreatedAt(LocalDateTime.now());
 		commentRepository.save(comment);
 	}
-
 }

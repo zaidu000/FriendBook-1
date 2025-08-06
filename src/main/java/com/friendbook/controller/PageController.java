@@ -81,18 +81,29 @@ public class PageController {
 	}
 
 	@PostMapping("/profile/upload")
-	public String uploadProfileImage(@RequestParam("image") MultipartFile file, Principal principal)
-			throws IOException {
+	public String uploadProfileImage(@RequestParam("image") MultipartFile file, Principal principal) throws IOException {
 		User user = userRepo.findByEmail(principal.getName()).orElse(null);
-		if (file != null && !file.isEmpty()) {
-			String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+		if (user != null && file != null && !file.isEmpty()) {
+			String contentType = file.getContentType();
+			if (contentType == null || !contentType.startsWith("image/")) {
+				throw new IllegalArgumentException("Only image files are allowed");
+			}
+			String originalFilename = file.getOriginalFilename().toLowerCase();
+			if (!(originalFilename.endsWith(".jpg") || originalFilename.endsWith(".jpeg") || originalFilename.endsWith(".png") || originalFilename.endsWith(".gif"))) {
+				throw new IllegalArgumentException("Only JPG, JPEG, PNG, or GIF files are allowed");
+			}
+
+			String filename = UUID.randomUUID() + "_" + originalFilename;
 			Path path = Paths.get("src/main/resources/static/images/" + filename);
 			Files.write(path, file.getBytes());
+
 			user.setProfileImage(filename);
 			userRepo.save(user);
 		}
+
 		return "redirect:/profile";
 	}
+
 
 	@PostMapping("/profile/update")
 	public String updateProfile(@RequestParam String favSongs, @RequestParam String favBooks,

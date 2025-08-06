@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.friendbook.model.Post;
 import com.friendbook.model.User;
@@ -29,28 +30,34 @@ public class PostController {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private PostRepository postRepository;
 
 	@GetMapping("/posts")
 	public String viewAllPosts(Model model, Principal principal) {
-		User currentUser = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+		User currentUser = userRepository.findByEmail(principal.getName())
+				.orElseThrow(() -> new RuntimeException("User not found"));
 		Set<User> following = currentUser.getFollowing();
 		Set<User> usersToFetchfrom = new HashSet<>(following);
 		usersToFetchfrom.add(currentUser);
-		
+
 		List<Post> posts = postRepository.findByUserInOrderByCreatedAtDesc(usersToFetchfrom);
-		
+
 		model.addAttribute("posts", posts);
 		model.addAttribute("user", currentUser);
 		return "posts";
 	}
 
 	@PostMapping("/posts/create")
-	public String createPost(@RequestParam String caption, @RequestParam MultipartFile image, Principal principal)
-			throws IOException {
-		postService.createPost(caption, image, principal.getName());
+	public String createPost(@RequestParam String caption, @RequestParam MultipartFile image, Principal principal,
+			RedirectAttributes redirectAttributes) throws IOException {
+		try {
+			postService.createPost(caption, image, principal.getName());
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return "redirect:/profile";
+		}
 		return "redirect:/profile";
 	}
 

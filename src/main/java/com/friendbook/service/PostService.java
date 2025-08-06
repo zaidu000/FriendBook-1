@@ -33,6 +33,16 @@ public class PostService {
 		User user = userRepository.findByEmail(userEmail).orElse(null);
 		
 		if(user != null && image != null && !image.isEmpty()) {
+			
+			String originalFilename = image.getOriginalFilename();
+	        if (originalFilename == null || !originalFilename.toLowerCase().matches(".*\\.(jpg|jpeg|png|gif)$")) {
+	            throw new IllegalArgumentException("Only image files (jpg, jpeg, png, gif) are allowed.");
+	        }
+
+	        String contentType = image.getContentType();
+	        if (contentType == null || !contentType.startsWith("image/")) {
+	            throw new IllegalArgumentException("Invalid image file type.");
+	        }
 			String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
 			Path path = Paths.get("src/main/resources/static/posts/" + fileName);
 			Files.write(path, image.getBytes());

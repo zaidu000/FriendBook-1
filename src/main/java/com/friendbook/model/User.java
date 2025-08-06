@@ -22,6 +22,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class User implements UserDetails {
@@ -38,6 +39,7 @@ public class User implements UserDetails {
 	private String email;
 
 	@NotBlank(message = "Password is required")
+	@Size(min = 8, message = "Password must be atleat 8 characters")
 	private String password;
 
 	@Column(unique = true)

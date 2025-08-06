@@ -21,6 +21,10 @@
 			<a th:href="@{/logout}">Logout</a>
 		</div>
 	</div>
+	
+	<div th:if="${error}" class="error-message" style="color: red; margin: 10px 0;">
+	    <p th:text="${error}"></p>
+	</div>
 
 	<div id="follow-modal" class="modal" style="display:none;">
 		<div class="modal-content">
@@ -55,7 +59,7 @@
 		<!-- Upload profile image -->
 		<div class="upload-section">
 			<form id="uploadForm" th:action="@{/profile/upload}" method="post" enctype="multipart/form-data">
-				<input type="file" name="image" id="imageInput" required>
+				<input type="file" name="image" accept="image/*" id="imageInput" required>
 				<button type="submit">Upload</button>
 			</form>
 		</div>
@@ -81,9 +85,9 @@
 			style="display:none; margin-top: 20px; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
 			<h3>Add a New Post</h3>
 			<form id="createPostForm" enctype="multipart/form-data">
-				<input type="text" name="caption" placeholder="Caption" required
+				<input type="text" name="caption" placeholder="Caption"
 					style="width:100%; margin-bottom:10px;"><br>
-				<input type="file" name="image" required style="margin-bottom:10px;"><br>
+				<input type="file" name="image" accept="image/*" required style="margin-bottom:10px;"><br>
 				<button type="submit">Post</button>
 				<button type="button" onclick="toggleAddPostForm()">Cancel</button>
 			</form>

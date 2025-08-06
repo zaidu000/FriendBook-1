@@ -22,6 +22,14 @@
 		</div>
 	</div>
 
+	<div id="follow-modal" class="modal" style="display:none;">
+		<div class="modal-content">
+			<span class="close-btn" onclick="closeFollowModal()">&times;</span>
+			<h3 id="follow-title">Followers</h3>
+			<ul id="follow-list"></ul>
+		</div>
+	</div>
+
 	<input type="text" id="search-box" placeholder="Search users..." autocomplete="off" />
 	<div id="suggestions" class="suggestion-box"></div>
 
@@ -39,8 +47,8 @@
 				<h2 th:text="${user.fullName}">User Name</h2>
 				<p>Username: <span th:text="${user.getUsernameField()}"></span></p>
 				<p>Email: <span th:text="${user.email}"></span></p>
-				<p>Followers: <span th:text="${followersCount}"></span> | Following: <span
-						th:text="${followingCount}"></span></p>
+				<p>Followers: <span class="clickable" th:text="${followersCount}" onclick="showFollowers()"></span> |
+					Following: <span class="clickable" th:text="${followingCount}" onclick="showFollowing()"></span></p>
 			</div>
 		</div>
 

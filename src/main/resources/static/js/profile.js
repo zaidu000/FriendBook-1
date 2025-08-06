@@ -220,3 +220,55 @@ function deleteComment(commentId) {
 		alert("Something went wrong");
 	});
 }
+
+function showFollowers() {
+    fetch('/followers')
+        .then(response => response.json())
+        .then(data => {
+            const list = document.getElementById('follow-list');
+            list.innerHTML = '';
+            document.getElementById('follow-title').textContent = 'Followers';
+
+            if (data.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'No users found';
+                list.appendChild(li);
+            } else {
+                data.forEach(user => {
+                    const li = document.createElement('li');
+                    li.textContent = user.fullName || user.username || 'Unknown';
+                    list.appendChild(li);
+                });
+            }
+
+            document.getElementById('follow-modal').style.display = 'block';
+        });
+}
+
+function showFollowing() {
+    fetch('/following')
+        .then(response => response.json())
+        .then(data => {
+            const list = document.getElementById('follow-list');
+            list.innerHTML = '';
+            document.getElementById('follow-title').textContent = 'Following';
+
+            if (data.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'No users found';
+                list.appendChild(li);
+            } else {
+                data.forEach(user => {
+                    const li = document.createElement('li');
+                    li.textContent = user.fullName || user.username || 'Unknown';
+                    list.appendChild(li);
+                });
+            }
+
+            document.getElementById('follow-modal').style.display = 'block';
+        });
+}
+
+function closeFollowModal() {
+    document.getElementById('follow-modal').style.display = 'none';
+}

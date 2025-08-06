@@ -80,7 +80,7 @@ public class FriendRequestController {
 
 	@PostMapping("/friend-request/decline/{username}")
 	public String declineRequest(@PathVariable("username") String username, Principal principal) {
-		User currentUser = userRepository.findByUsername(principal.getName())
+		User currentUser = userRepository.findByEmail(principal.getName())
 				.orElseThrow(() -> new RuntimeException("Current user not found"));
 
 		User sender = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("Sender not found"));

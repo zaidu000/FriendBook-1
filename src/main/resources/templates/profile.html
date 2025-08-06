@@ -46,7 +46,7 @@
 
 	<div class="container">
 		<div class="profile-header">
-			<img id="profileImg" th:src="@{'/images/' + ${user.profileImage}}" alt="Profile Image" />
+			<img id="profileImg" th:src="@{'/uploads/images/' + ${user.profileImage}}" alt="Profile Image" />
 			<div class="profile-info">
 				<h2 th:text="${user.fullName}">User Name</h2>
 				<p>Username: <span th:text="${user.getUsernameField()}"></span></p>
@@ -99,7 +99,7 @@
 		<h3>Your Posts</h3>
 		<div th:each="post : ${userPosts}" class="card">
 			<h4 th:text="${post.caption}">Post Caption</h4>
-			<img th:src="@{'/posts/' + ${post.imagePath}}" />
+			<img th:src="@{'/uploads/posts/' + ${post.imagePath}}" />
 
 			<!-- Like/Unlike and Buttons -->
 			<div class="card-buttons">

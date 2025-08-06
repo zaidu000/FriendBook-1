@@ -23,7 +23,7 @@
 		<div class="grid">
 			<div th:each="post : ${posts}" class="card">
 				<h3 th:text="${post.caption}">Caption</h3>
-				<img th:src="@{'/posts/' + ${post.imagePath}}" alt="Post Image" />
+				<img th:src="@{'/uploads/posts/' + ${post.imagePath}}" alt="Post Image" />
 				<p class="meta">
 					Posted by <b th:text="${post.user.getUsernameField()}">Username</b><br>
 					<span th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm')}">Date</span>

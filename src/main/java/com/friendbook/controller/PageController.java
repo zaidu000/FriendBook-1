@@ -94,7 +94,7 @@ public class PageController {
 			}
 
 			String filename = UUID.randomUUID() + "_" + originalFilename;
-			Path path = Paths.get("src/main/resources/static/images/" + filename);
+			Path path = Paths.get("uploads/images/" + filename);
 			Files.write(path, file.getBytes());
 
 			user.setProfileImage(filename);

@@ -26,21 +26,20 @@
 		</div>
 
 		<div th:if="${pendingRequests != null and !pendingRequests.isEmpty()}">
-			<div th:each="req : ${pendingRequests}" class="request">
+			<div th:each="req : ${pendingRequests}" class="request" th:id="'request-' + ${req.sender.username}">
 				<div class="request-info">
 					<span th:text="${req.sender.fullName}">Sender Name</span> sent you a friend request.
 				</div>
 				<div class="buttons">
-					<form th:action="@{'/friend-request/accept/' + ${req.sender.username}}" method="post">
-						<button type="submit" class="accept-btn">Accept</button>
-					</form>
-					<form th:action="@{'/friend-request/decline/' + ${req.sender.username}}" method="post">
-						<button type="submit" class="decline-btn">Decline</button>
-					</form>
+					<button type="button" class="accept-btn" th:attr="data-username=${req.sender.username}"
+						onclick="handleAccept(this)">Accept</button>
+					<button type="button" class="decline-btn" th:attr="data-username=${req.sender.username}"
+						onclick="handleDecline(this)">Decline</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	<script th:src="@{/js/notifications.js}" ></script>
 </body>
 
 </html>

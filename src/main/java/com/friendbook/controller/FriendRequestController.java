@@ -56,41 +56,54 @@ public class FriendRequestController {
 	}
 
 	@PostMapping("/friend-request/accept/{username}")
-	public String acceptRequest(@PathVariable String username, Principal principal) {
-		User currentUser = userRepository.findByEmail(principal.getName())
-				.orElseThrow(() -> new RuntimeException("Current user not found"));
+	@ResponseBody
+	public ResponseEntity<String> acceptRequest(@PathVariable String username, Principal principal) {
+		try {
+			User currentUser = userRepository.findByEmail(principal.getName())
+					.orElseThrow(() -> new RuntimeException("Current user not found"));
 
-		User sender = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("Sender not found"));
+			User sender = userRepository.findByEmail(username)
+					.orElseThrow(() -> new RuntimeException("Sender not found"));
 
-		FriendRequest request = friendRequestRepository.findBySenderAndReceiverAndStatus(sender, currentUser, "pending")
-				.orElseThrow(() -> new RuntimeException("Friend request not found"));
+			FriendRequest request = friendRequestRepository
+					.findBySenderAndReceiverAndStatus(sender, currentUser, "pending")
+					.orElseThrow(() -> new RuntimeException("Friend request not found"));
 
-		request.setStatus("accepted");
-		request.setAccepted(true);
-		friendRequestRepository.save(request);
+			request.setStatus("accepted");
+			request.setAccepted(true);
+			friendRequestRepository.save(request);
 
-		currentUser.getFollowers().add(sender);
-		sender.getFollowing().add(currentUser);
+			currentUser.getFollowers().add(sender);
+			sender.getFollowing().add(currentUser);
 
-		userRepository.save(currentUser);
-		userRepository.save(sender);
+			userRepository.save(currentUser);
+			userRepository.save(sender);
 
-		return "redirect:/profile";
+			return ResponseEntity.ok("Request accepted");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+		}
 	}
 
 	@PostMapping("/friend-request/decline/{username}")
-	public String declineRequest(@PathVariable("username") String username, Principal principal) {
-		User currentUser = userRepository.findByEmail(principal.getName())
-				.orElseThrow(() -> new RuntimeException("Current user not found"));
+	@ResponseBody
+	public ResponseEntity<String> declineRequest(@PathVariable("username") String username, Principal principal) {
+		try {
+			User currentUser = userRepository.findByEmail(principal.getName())
+					.orElseThrow(() -> new RuntimeException("Current user not found"));
 
-		User sender = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("Sender not found"));
+			User sender = userRepository.findByEmail(username)
+					.orElseThrow(() -> new RuntimeException("Sender not found"));
 
-		FriendRequest request = friendRequestRepository.findBySenderAndReceiver(sender, currentUser)
-				.orElseThrow(() -> new RuntimeException("Friend request not found"));
+			FriendRequest request = friendRequestRepository.findBySenderAndReceiver(sender, currentUser)
+					.orElseThrow(() -> new RuntimeException("Friend request not found"));
 
-		friendRequestRepository.delete(request);
+			friendRequestRepository.delete(request);
 
-		return "redirect:/profile";
+			return ResponseEntity.ok("Request declined");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+		}
 	}
 
 	@ModelAttribute("pendingRequestCount")

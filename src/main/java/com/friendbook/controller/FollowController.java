@@ -41,18 +41,6 @@ public class FollowController {
 		return ok ? ResponseEntity.ok("Unfollowed") : ResponseEntity.badRequest().body("Error");
 	}
 	
-	@GetMapping("/api/followers")
-	public List<User> getFollowers(Principal principal) {
-	    User user = userService.getUserByUsername(principal.getName());
-	    return new ArrayList<>(user.getFollowers());
-	}
-
-	@GetMapping("/api/following")
-	public List<User> getFollowing(Principal principal) {
-	    User user = userService.getUserByUsername(principal.getName());
-	    return new ArrayList<>(user.getFollowing());
-	}
-	
 	@GetMapping("/followers")
 	@ResponseBody
 	public List<Map<String, String>> getFollowers1(Principal principal) {

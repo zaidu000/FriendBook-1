@@ -4,7 +4,7 @@
 <head>
 	<title>Feed - FriendBook</title>
 	<meta name="username" th:content="${#authentication.name}">
-	<link rel="styleshet" th:href="@{/css/posts.css}" />
+	<link rel="stylesheet" th:href="@{/css/posts.css}" />
 </head>
 
 <body>
@@ -42,6 +42,10 @@
 					<div th:each="comment : ${post.comments}">
 						<p><b th:text="${comment.user.getUsernameField()}"></b>:
 							<span th:text="${comment.text}"></span>
+							<button th:if="${comment.user.usernameField == user.usernameField}"
+								class="comment-delete-btn" th:attr="onclick=|deleteComment(${comment.id})|">
+								Delete
+							</button>
 						</p>
 					</div>
 				</div>

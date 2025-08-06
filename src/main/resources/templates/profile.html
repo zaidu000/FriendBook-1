@@ -103,6 +103,10 @@
 						<div th:each="comment : ${post.comments}">
 							<p><strong th:text="${comment.user.getUsernameField()}">Username</strong>:
 								<span th:text="${comment.text}">Comment text</span>
+								<button th:if="${comment.user.usernameField == user.usernameField}"
+									class="comment-delete-btn" th:attr="onclick=|deleteComment(${comment.id})|">
+									Delete
+								</button>
 							</p>
 						</div>
 					</div>

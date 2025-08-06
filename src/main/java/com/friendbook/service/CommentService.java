@@ -36,4 +36,13 @@ public class CommentService {
 		comment.setCreatedAt(LocalDateTime.now());
 		commentRepository.save(comment);
 	}
+	
+	public boolean deleteComment(Long commentId, User user) {
+		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
+		if(!comment.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("Unauthorzied deletion attempt");
+		}
+		commentRepository.delete(comment);
+		return true;
+	}
 }

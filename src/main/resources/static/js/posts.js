@@ -51,3 +51,23 @@ async function toggleLike(postId) {
 		alert("Failed to like/unlike");
 	}
 }
+
+function deleteComment(commentId) {
+	if (!confirm("Are you sure you want to delete this comment?")) return;
+
+	fetch(`/comments/delete/${commentId}`, {
+		method: 'DELETE'
+	})
+	.then(res => {
+		if (res.ok) {
+			alert("Comment deleted");
+			location.reload();
+		} else {
+			res.text().then(msg => alert("Error: " + msg));
+		}
+	})
+	.catch(err => {
+		console.error("Error deleting comment:", err);
+		alert("Something went wrong");
+	});
+}

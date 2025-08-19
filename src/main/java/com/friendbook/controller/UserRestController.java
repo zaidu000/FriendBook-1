@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.friendbook.dto.UserDTO;
 import com.friendbook.model.User;
-import com.friendbook.service.UserService;
+import com.friendbook.service.impl.UserServiceImpl;
 import com.friendbook.utility.CaptchaUtility;
 import com.friendbook.utility.SignupResponse;
 
@@ -19,7 +19,7 @@ import com.friendbook.utility.SignupResponse;
 public class UserRestController {
 	
 	@Autowired
-	private UserService userService;
+	private UserServiceImpl userService;
 
 	@Autowired
 	private CaptchaUtility captchaUtility;

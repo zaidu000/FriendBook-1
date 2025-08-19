@@ -17,17 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.friendbook.model.User;
-import com.friendbook.service.FriendRequestService;
-import com.friendbook.service.UserService;
+import com.friendbook.service.impl.FriendRequestServiceImpl;
+import com.friendbook.service.impl.UserServiceImpl;
 
 @Controller
 public class SearchController {
 	
 	@Autowired
-	private UserService userService;
+	private UserServiceImpl userService;
 	
 	@Autowired
-	private FriendRequestService friendRequestService;
+	private FriendRequestServiceImpl friendRequestService;
 	
 	@GetMapping("/api/search/users")
 	public ResponseEntity<List<Map<String, String>>> searchUsers(@RequestParam String query) {

@@ -11,13 +11,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.friendbook.service.CustomUserDetailsService;
+import com.friendbook.service.impl.CustomUserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired 
-    private CustomUserDetailsService uds;
+    private CustomUserDetailsServiceImpl uds;
 
     @Bean 
     public PasswordEncoder passwordEncoder() {

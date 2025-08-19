@@ -1,0 +1,52 @@
+package com.friendbook.service.impl;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.friendbook.model.Comment;
+import com.friendbook.model.Post;
+import com.friendbook.model.User;
+import com.friendbook.repository.CommentRepository;
+import com.friendbook.repository.PostRepository;
+import com.friendbook.service.CommentService;
+
+@Service
+public class CommentServiceImpl implements CommentService {
+
+	@Autowired
+	private CommentRepository commentRepository;
+
+	@Autowired
+	private PostRepository postRepository;
+
+	@Override
+	public List<Comment> getCommentsForPost(Long postId) {
+		Post post = postRepository.findById(postId).orElse(null);
+		return post != null ? commentRepository.findByPostOrderByCreatedAtAsc(post) : List.of();
+	}
+
+	@Override
+	public void saveComment(Long postId, User user, String text) {
+		Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+
+		Comment comment = new Comment();
+		comment.setText(text);
+		comment.setPost(post);
+		comment.setUser(user);
+		comment.setCreatedAt(LocalDateTime.now());
+		commentRepository.save(comment);
+	}
+	
+	@Override
+	public boolean deleteComment(Long commentId, User user) {
+		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
+		if(!comment.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("Unauthorzied deletion attempt");
+		}
+		commentRepository.delete(comment);
+		return true;
+	}
+}

@@ -18,17 +18,17 @@ import com.friendbook.model.FriendRequest;
 import com.friendbook.model.User;
 import com.friendbook.repository.FriendRequestRepository;
 import com.friendbook.repository.UserRepository;
-import com.friendbook.service.FriendRequestService;
-import com.friendbook.service.UserService;
+import com.friendbook.service.impl.FriendRequestServiceImpl;
+import com.friendbook.service.impl.UserServiceImpl;
 
 @Controller
 public class FriendRequestController {
 
 	@Autowired
-	private FriendRequestService requestService;
+	private FriendRequestServiceImpl requestService;
 
 	@Autowired
-	private UserService userService;
+	private UserServiceImpl userService;
 
 	@Autowired
 	private FriendRequestRepository friendRequestRepository;

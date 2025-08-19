@@ -17,17 +17,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.friendbook.model.User;
-import com.friendbook.service.FollowService;
-import com.friendbook.service.UserService;
+import com.friendbook.service.impl.FollowServiceImpl;
+import com.friendbook.service.impl.UserServiceImpl;
 
 @RestController
 public class FollowController {
 	
 	@Autowired
-	private FollowService followService;
+	private FollowServiceImpl followService;
 	
 	@Autowired
-	private UserService userService;
+	private UserServiceImpl userService;
 
 	@PostMapping("/api/follow/{targetUserId}")
 	public ResponseEntity<String> follow(@PathVariable Long targetUserId, Principal principal) {

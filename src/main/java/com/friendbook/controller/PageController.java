@@ -18,8 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.friendbook.model.User;
 import com.friendbook.repository.UserRepository;
-import com.friendbook.service.FollowService;
-import com.friendbook.service.PostService;
+import com.friendbook.service.impl.FollowServiceImpl;
+import com.friendbook.service.impl.PostServiceImpl;
 
 @Controller
 public class PageController {
@@ -28,10 +28,10 @@ public class PageController {
 	private UserRepository userRepo;
 
 	@Autowired
-	private FollowService followService;
+	private FollowServiceImpl followService;
 	
 	@Autowired
-	private PostService postService;
+	private PostServiceImpl postService;
 	
 	@GetMapping("/")
 	public String showHomePage() {

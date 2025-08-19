@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.friendbook.service.LikeService;
+import com.friendbook.service.impl.LikeServiceImpl;
 
 @RestController
 @RequestMapping("/api/likes")
 public class LikeController {
 	
 	@Autowired
-	private LikeService likeService;
+	private LikeServiceImpl likeService;
 
 	@PostMapping("/{postId}")
 	public ResponseEntity<String> toggleLike(@PathVariable Long postId, Principal principal) {

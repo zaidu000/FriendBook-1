@@ -20,13 +20,13 @@ import com.friendbook.model.Post;
 import com.friendbook.model.User;
 import com.friendbook.repository.PostRepository;
 import com.friendbook.repository.UserRepository;
-import com.friendbook.service.PostService;
+import com.friendbook.service.impl.PostServiceImpl;
 
 @Controller
 public class PostController {
 
 	@Autowired
-	private PostService postService;
+	private PostServiceImpl postService;
 
 	@Autowired
 	private UserRepository userRepository;

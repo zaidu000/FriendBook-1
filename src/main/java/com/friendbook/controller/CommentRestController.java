@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.friendbook.model.Comment;
 import com.friendbook.model.User;
-import com.friendbook.service.CommentService;
-import com.friendbook.service.UserService;
+import com.friendbook.service.impl.CommentServiceImpl;
+import com.friendbook.service.impl.UserServiceImpl;
 
 @RestController
 public class CommentRestController {
 
 	@Autowired
-	private CommentService commentService;
+	private CommentServiceImpl commentService;
 
 	@Autowired
-	private UserService userService;
+	private UserServiceImpl userService;
 
 	@PostMapping("comments/{postId}")
 	@ResponseBody

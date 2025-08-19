@@ -1,5 +1,6 @@
 package com.friendbook.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,15 @@ import com.friendbook.utility.SignupResponse;
 @RestController
 @RequestMapping("/api")
 public class UserRestController {
-	
+
 	@Autowired
 	private UserServiceImpl userService;
 
 	@Autowired
 	private CaptchaUtility captchaUtility;
+	
+	@Autowired
+    private ModelMapper modelMapper;
 
 	@PostMapping("/signup")
 	public ResponseEntity<SignupResponse> signup(@RequestBody UserDTO dto) {
@@ -33,16 +37,20 @@ public class UserRestController {
 					.body(new SignupResponse(false, "Captcha failed. Please try again."));
 		}
 
-		User user = new User();
-		user.setFullName(dto.fullName);
-		user.setEmail(dto.email);
-		user.setPassword(dto.password);
-
+		// We can create it using ModelMapper
+		/*
+		 * User user = new User(); 
+		 * user.setFullName(dto.fullName);
+		 * user.setEmail(dto.email); 
+		 * user.setPassword(dto.password);
+		 */
+		//Convert dto to entity
+		User user = modelMapper.map(dto, User.class);
+		
 		boolean ok = userService.registerUser(user);
 		if (ok) {
 			return ResponseEntity.ok(new SignupResponse(true, "Signup successful!"));
-		}
-		else {
+		} else {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new SignupResponse(false, "Email exists."));
 		}
 	}

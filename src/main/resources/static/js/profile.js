@@ -112,7 +112,7 @@ document.getElementById("createPostForm").addEventListener("submit", async funct
 		msg.style.color = "green";
 		form.reset();
 		setTimeout(() => {
-			location.reload(); 
+			location.reload();
 		}, 1000);
 	} else {
 		msg.innerText = "Failed to create post!";
@@ -134,7 +134,7 @@ function cancelEdit(postId) {
 // Handle Edit Submit (Prevent page reload)
 async function handleEditSubmit(event, form) {
 	event.preventDefault();
-	const postId = form.action.split("/").pop(); 
+	const postId = form.action.split("/").pop();
 	const formData = new FormData(form);
 	const caption = formData.get("caption");
 
@@ -146,7 +146,7 @@ async function handleEditSubmit(event, form) {
 	if (res.ok) {
 		alert("Post updated!");
 		form.style.display = "none";
-		location.reload(); 
+		location.reload();
 	} else {
 		alert("Failed to update post.");
 	}
@@ -207,68 +207,125 @@ function deleteComment(commentId) {
 	fetch(`/comments/delete/${commentId}`, {
 		method: 'DELETE'
 	})
-	.then(res => {
-		if (res.ok) {
-			alert("Comment deleted");
-			location.reload();
-		} else {
-			res.text().then(msg => alert("Error: " + msg));
-		}
-	})
-	.catch(err => {
-		console.error("Error deleting comment:", err);
-		alert("Something went wrong");
-	});
+		.then(res => {
+			if (res.ok) {
+				alert("Comment deleted");
+				location.reload();
+			} else {
+				res.text().then(msg => alert("Error: " + msg));
+			}
+		})
+		.catch(err => {
+			console.error("Error deleting comment:", err);
+			alert("Something went wrong");
+		});
 }
 
 function showFollowers() {
-    fetch('/followers')
-        .then(response => response.json())
-        .then(data => {
-            const list = document.getElementById('follow-list');
-            list.innerHTML = '';
-            document.getElementById('follow-title').textContent = 'Followers';
+	fetch('/followers')
+		.then(response => response.json())
+		.then(data => {
+			const list = document.getElementById('follow-list');
+			list.innerHTML = '';
+			document.getElementById('follow-title').textContent = 'Followers';
 
-            if (data.length === 0) {
-                const li = document.createElement('li');
-                li.textContent = 'No users found';
-                list.appendChild(li);
-            } else {
-                data.forEach(user => {
-                    const li = document.createElement('li');
-                    li.textContent = user.fullName || user.username || 'Unknown';
-                    list.appendChild(li);
-                });
-            }
+			if (data.length === 0) {
+				const li = document.createElement('li');
+				li.textContent = 'No users found';
+				list.appendChild(li);
+			} else {
+				data.forEach(user => {
+					const li = document.createElement('li');
+					li.textContent = user.fullName || user.username || 'Unknown';
+					list.appendChild(li);
+				});
+			}
 
-            document.getElementById('follow-modal').style.display = 'block';
-        });
+			document.getElementById('follow-modal').style.display = 'block';
+		});
 }
 
 function showFollowing() {
-    fetch('/following')
-        .then(response => response.json())
-        .then(data => {
-            const list = document.getElementById('follow-list');
-            list.innerHTML = '';
-            document.getElementById('follow-title').textContent = 'Following';
+	fetch('/following')
+		.then(response => response.json())
+		.then(data => {
+			const list = document.getElementById('follow-list');
+			list.innerHTML = '';
+			document.getElementById('follow-title').textContent = 'Following';
 
-            if (data.length === 0) {
-                const li = document.createElement('li');
-                li.textContent = 'No users found';
-                list.appendChild(li);
-            } else {
-                data.forEach(user => {
-                    const li = document.createElement('li');
-                    li.textContent = user.fullName || user.username || 'Unknown';
-                    list.appendChild(li);
-                });
-            }
+			if (data.length === 0) {
+				const li = document.createElement('li');
+				li.textContent = 'No users found';
+				list.appendChild(li);
+			} else {
+				data.forEach(user => {
+					const li = document.createElement('li');
+					li.textContent = user.fullName || user.username || 'Unknown';
+					list.appendChild(li);
+				});
+			}
 
-            document.getElementById('follow-modal').style.display = 'block';
-        });
+			document.getElementById('follow-modal').style.display = 'block';
+		});
 }
 
 function closeFollowModal() {
-    document.getElementById('follow-modal').style.display = 'none';
+	document.getElementById('follow-modal').style.display = 'none';
 }
+function showLikes(postId) {
+	fetch(`/api/likes/${postId}`)
+		.then(response => response.json())
+		.then(users => {
+			const likesList = document.getElementById("likesList");
+			likesList.innerHTML = "";
+
+			if (!users || users.length === 0) {
+				likesList.innerHTML = "<li>No likes yet</li>";
+			} else {
+				users.forEach(user => {
+					const li = document.createElement("li");
+					li.style.display = "flex";
+					li.style.alignItems = "center";
+					li.style.marginBottom = "8px";
+
+					li.innerHTML = `
+                        <img src="/uploads/images/${user.profileImage || 'default.png'}"
+                             style="width:30px;height:30px;border-radius:50%;margin-right:8px;">
+                        <span><b>${user.username}</b> (${user.fullName})</span>
+                    `;
+					likesList.appendChild(li);
+				});
+			}
+
+			document.getElementById("likesModal").style.display = "flex";
+		})
+		.catch(err => {
+			console.error("Error fetching likes:", err);
+		});
+}
+
+
+function closeLikesModal() {
+	document.getElementById("likesModal").style.display = "none";
+}
+
+function showMedia(postId, index) {
+	const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
+	mediaItems.forEach(item => item.classList.remove("active"));
+	if (mediaItems[index]) {
+		mediaItems[index].classList.add("active");
+	}
+}
+function nextMedia(postId) {
+	const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
+	let currentIndex = Array.from(mediaItems).findIndex(item => item.classList.contains("active"));
+	let nextIndex = (currentIndex + 1) % mediaItems.length;
+	showMedia(postId, nextIndex);
+}
+function prevMedia(postId) {
+	const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
+	let currentIndex = Array.from(mediaItems).findIndex(item => item.classList.contains("active"));
+	let prevIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
+	showMedia(postId, prevIndex);
+}
+

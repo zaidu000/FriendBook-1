@@ -333,9 +333,11 @@ body {
 .modal {
 	display: none;
 	position: fixed;
-	top: 0; left: 0;
-	width: 100%; height: 100%;
-	background-color: rgba(0,0,0,0.5);
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 1000;
 }
 
@@ -345,29 +347,67 @@ body {
 	padding: 20px;
 	width: 400px;
 	border-radius: 8px;
-	box-shadow: 0 0 10px rgba(0,0,0,0.3);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 	position: relative;
 	margin-bottom: 8px;
 	font-size: 16px;
 }
 
 .modal-content ul li:first-letter {
-    text-transform: capitalize;
+	text-transform: capitalize;
 }
 
 .modal-content ul li::marker {
-    color: #007bff;
+	color: #007bff;
 }
 
 .close-btn {
 	position: absolute;
-	top: 10px; right: 15px;
+	top: 10px;
+	right: 15px;
 	cursor: pointer;
 	font-size: 20px;
 }
 
 .clickable {
-  cursor: pointer;
-  color: #007bff;
-  text-decoration: underline;
+	cursor: pointer;
+	color: #007bff;
+	text-decoration: underline;
+}
+
+.carousel-container {
+	position: relative;
+	max-width: 500px;
+	margin: auto;
+}
+
+.carousel-media {
+	display: none;
+	width: 100%;
+	border-radius: 8px;
+}
+
+.carousel-media.active {
+	display: block;
+}
+
+.carousel-btn {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	border: none;
+	font-size: 20px;
+	padding: 10px;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+.carousel-btn.left {
+	left: 10px;
+}
+
+.carousel-btn.right {
+	right: 10px;
 }

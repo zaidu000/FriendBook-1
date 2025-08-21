@@ -58,16 +58,36 @@ function deleteComment(commentId) {
 	fetch(`/comments/delete/${commentId}`, {
 		method: 'DELETE'
 	})
-	.then(res => {
-		if (res.ok) {
-			alert("Comment deleted");
-			location.reload();
-		} else {
-			res.text().then(msg => alert("Error: " + msg));
-		}
-	})
-	.catch(err => {
-		console.error("Error deleting comment:", err);
-		alert("Something went wrong");
-	});
+		.then(res => {
+			if (res.ok) {
+				alert("Comment deleted");
+				location.reload();
+			} else {
+				res.text().then(msg => alert("Error: " + msg));
+			}
+		})
+		.catch(err => {
+			console.error("Error deleting comment:", err);
+			alert("Something went wrong");
+		});
+}
+
+function showMedia(postId, index) {
+	const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
+	mediaItems.forEach(item => item.classList.remove("active"));
+	if (mediaItems[index]) {
+		mediaItems[index].classList.add("active");
+	}
+}
+function nextMedia(postId) {
+	const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
+	let currentIndex = Array.from(mediaItems).findIndex(item => item.classList.contains("active"));
+	let nextIndex = (currentIndex + 1) % mediaItems.length;
+	showMedia(postId, nextIndex);
+}
+function prevMedia(postId) {
+	const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
+	let currentIndex = Array.from(mediaItems).findIndex(item => item.classList.contains("active"));
+	let prevIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
+	showMedia(postId, prevIndex);
 }

@@ -2,240 +2,200 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Profile - FriendBook</title>
-    <link rel="stylesheet" th:href="@{/css/profile.css}" />
-    <style>
-        /* --- Carousel Styles --- */
-        .carousel-container {
-            position: relative;
-            max-width: 500px;
-            margin: auto;
-        }
-
-        .carousel-media {
-            display: none;
-            width: 100%;
-            border-radius: 8px;
-        }
-
-        .carousel-media.active {
-            display: block;
-        }
-
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            font-size: 20px;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-
-        .carousel-btn.left {
-            left: 10px;
-        }
-
-        .carousel-btn.right {
-            right: 10px;
-        }
-    </style>
+	<title>Profile - FriendBook</title>
+	<link rel="stylesheet" th:href="@{/css/profile.css}" />
 </head>
 
 <body>
 
-    <!-- Navbar -->
-    <div class="navbar">
-        <h1>FriendBook</h1>
-        <div class="nav-links">
-            <a th:href="@{/profile}">Home</a>
-            <a th:href="@{/posts}">Feed</a>
-            <a th:href="@{/notifications}" class="notification-icon">
-                <span class="notification-count" th:text="${pendingRequestsCount}"
-                      th:if="${pendingRequestsCount > 0}"></span>
-                Notifications
-            </a>
-            <a th:href="@{/logout}">Logout</a>
-        </div>
-    </div>
+	<!-- Navbar -->
+	<div class="navbar">
+		<h1>FriendBook</h1>
+		<div class="nav-links">
+			<a th:href="@{/profile}">Home</a>
+			<a th:href="@{/posts}">Feed</a>
+			<a th:href="@{/notifications}" class="notification-icon">
+				<span class="notification-count" th:text="${pendingRequestsCount}"
+					th:if="${pendingRequestsCount > 0}"></span>
+				Notifications
+			</a>
+			<a th:href="@{/logout}">Logout</a>
+		</div>
+	</div>
 
-    <!-- Error -->
-    <div th:if="${error}" class="error-message" style="color: red; margin: 10px 0;">
-        <p th:text="${error}"></p>
-    </div>
+	<!-- Error -->
+	<div th:if="${error}" class="error-message" style="color: red; margin: 10px 0;">
+		<p th:text="${error}"></p>
+	</div>
 
-    <!-- Followers/Following Modal -->
-    <div id="follow-modal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeFollowModal()">&times;</span>
-            <h3 id="follow-title">Followers</h3>
-            <ul id="follow-list"></ul>
-        </div>
-    </div>
+	<!-- Followers/Following Modal -->
+	<div id="follow-modal" class="modal" style="display:none;">
+		<div class="modal-content">
+			<span class="close-btn" onclick="closeFollowModal()">&times;</span>
+			<h3 id="follow-title">Followers</h3>
+			<ul id="follow-list"></ul>
+		</div>
+	</div>
 
-    <!-- Search -->
-    <input type="text" id="search-box" placeholder="Search users..." autocomplete="off" />
-    <div id="suggestions" class="suggestion-box"></div>
+	<!-- Search -->
+	<input type="text" id="search-box" placeholder="Search users..." autocomplete="off" />
+	<div id="suggestions" class="suggestion-box"></div>
 
-    <!-- User Modal -->
-    <div id="user-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <div id="user-details"></div>
-        </div>
-    </div>
+	<!-- User Modal -->
+	<div id="user-modal" class="modal">
+		<div class="modal-content">
+			<span class="close-btn" onclick="closeModal()">&times;</span>
+			<div id="user-details"></div>
+		</div>
+	</div>
 
-    <div class="container">
+	<div class="container">
 
-        <!-- Profile Info -->
-        <div class="profile-header">
-            <img id="profileImg" th:src="@{'/uploads/images/' + ${user.profileImage}}" alt="Profile Image" />
-            <div class="profile-info">
-                <h2 th:text="${user.fullName}">User Name</h2>
-                <p>Username: <span th:text="${user.getUsernameField()}"></span></p>
-                <p>Email: <span th:text="${user.email}"></span></p>
-                <p>
-                    Followers: <span class="clickable" th:text="${followersCount}" onclick="showFollowers()"></span> |
-                    Following: <span class="clickable" th:text="${followingCount}" onclick="showFollowing()"></span>
-                </p>
-            </div>
-        </div>
+		<!-- Profile Info -->
+		<div class="profile-header">
+			<img id="profileImg" th:src="@{'/uploads/images/' + ${user.profileImage}}" alt="Profile Image" />
+			<div class="profile-info">
+				<h2 th:text="${user.fullName}">User Name</h2>
+				<p>Username: <span th:text="${user.getUsernameField()}"></span></p>
+				<p>Email: <span th:text="${user.email}"></span></p>
+				<p>
+					Followers: <span class="clickable" th:text="${followersCount}" onclick="showFollowers()"></span> |
+					Following: <span class="clickable" th:text="${followingCount}" onclick="showFollowing()"></span>
+				</p>
+			</div>
+		</div>
 
-        <!-- Upload profile image -->
-        <div class="upload-section">
-            <form id="uploadForm" th:action="@{/profile/upload}" method="post" enctype="multipart/form-data">
-                <input type="file" name="image" accept="image/*" id="imageInput" required>
-                <button type="submit">Upload</button>
-            </form>
-        </div>
+		<!-- Upload profile image -->
+		<div class="upload-section">
+			<form id="uploadForm" th:action="@{/profile/upload}" method="post" enctype="multipart/form-data">
+				<input type="file" name="image" accept="image/*" id="imageInput" required>
+				<button type="submit">Upload</button>
+			</form>
+		</div>
 
-        <!-- Favorites -->
-        <div class="favorites">
-            <h3>Favorites</h3>
-            <form id="favoritesForm" th:action="@{/profile/update}" method="post">
-                <input type="text" name="favSongs" id="favSongs" th:value="${user.favSongs}" placeholder="Favorite Songs">
-                <input type="text" name="favBooks" id="favBooks" th:value="${user.favBooks}" placeholder="Favorite Books">
-                <input type="text" name="favPlaces" id="favPlaces" th:value="${user.favPlaces}" placeholder="Favorite Places">
-                <button type="submit">Save</button>
-            </form>
-        </div>
+		<!-- Favorites -->
+		<div class="favorites">
+			<h3>Favorites</h3>
+			<form id="favoritesForm" th:action="@{/profile/update}" method="post">
+				<input type="text" name="favSongs" id="favSongs" th:value="${user.favSongs}"
+					placeholder="Favorite Songs">
+				<input type="text" name="favBooks" id="favBooks" th:value="${user.favBooks}"
+					placeholder="Favorite Books">
+				<input type="text" name="favPlaces" id="favPlaces" th:value="${user.favPlaces}"
+					placeholder="Favorite Places">
+				<button type="submit">Save</button>
+			</form>
+		</div>
 
-        <!-- Add Post -->
-        <button class="add-post-link" onclick="toggleAddPostForm()">+ Add New Post</button>
-        <div id="addPostForm"
-             style="display:none; margin-top: 20px; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
-            <h3>Add a New Post</h3>
-            <form id="createPostForm" th:action="@{/posts/create}" method="post" enctype="multipart/form-data">
-                <input type="text" name="caption" placeholder="Caption" style="width:100%; margin-bottom:10px;"><br>
-                <input type="file" name="files" accept="image/*,video/*" multiple required style="margin-bottom:10px;"><br>
-                <button type="submit">Post</button>
-                <button type="button" onclick="toggleAddPostForm()">Cancel</button>
-            </form>
-            <div id="postMessage" style="margin-top:10px;"></div>
-        </div>
+		<!-- Add Post -->
+		<button class="add-post-link" onclick="toggleAddPostForm()">+ Add New Post</button>
+		<div id="addPostForm"
+			style="display:none; margin-top: 20px; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
+			<h3>Add a New Post</h3>
+			<form id="createPostForm" th:action="@{/posts/create}" method="post" enctype="multipart/form-data">
+				<input type="text" name="caption" placeholder="Caption" style="width:100%; margin-bottom:10px;"><br>
+				<input type="file" name="files" accept="image/*,video/*" multiple required
+					style="margin-bottom:10px;"><br>
+				<button type="submit">Post</button>
+				<button type="button" onclick="toggleAddPostForm()">Cancel</button>
+			</form>
+			<div id="postMessage" style="margin-top:10px;"></div>
+		</div>
 
-        <!-- Posts Display -->
-        <h3>Your Posts</h3>
-        <div th:if="${userPosts != null and !userPosts.isEmpty()}">
-            <div th:each="post : ${userPosts}" class="card">
-                <h4 th:text="${post.caption}">Post Caption</h4>
+		<!-- Posts Display -->
+		<h3>Your Posts</h3>
+		<div th:if="${userPosts != null and !userPosts.isEmpty()}">
+			<div th:each="post : ${userPosts}" class="card">
+				<h4 th:text="${post.caption}">Post Caption</h4>
 
-                <!-- Media Carousel -->
-                <div class="carousel-container" th:id="'carousel-' + ${post.id}">
-                    <div th:each="media,iterStat : ${post.mediaList}"
-                         th:id="'media-' + ${post.id} + '-' + ${iterStat.index}"
-                         th:class="${iterStat.index == 0} ? 'carousel-media active' : 'carousel-media'">
+				<!-- Media Carousel -->
+				<div class="carousel-container" th:id="'carousel-' + ${post.id}">
+					<div th:each="media,iterStat : ${post.mediaList}"
+						th:id="'media-' + ${post.id} + '-' + ${iterStat.index}"
+						th:class="${iterStat.index == 0} ? 'carousel-media active' : 'carousel-media'">
 
-                        <!-- Image -->
-                        <img th:if="${media.mediaType == 'image'}"
-                             th:src="@{'/uploads/posts/' + ${media.filePath}}" alt="Post Image" />
+						<!-- Image -->
+						<img th:if="${media.mediaType == 'image'}" th:src="@{'/uploads/posts/' + ${media.filePath}}"
+							alt="Post Image" />
 
-                        <!-- Video -->
-                        <video th:if="${media.mediaType == 'video'}"
-                               th:src="@{'/uploads/posts/' + ${media.filePath}}" controls></video>
-                    </div>
+						<!-- Video -->
+						<video th:if="${media.mediaType == 'video'}" th:src="@{'/uploads/posts/' + ${media.filePath}}"
+							controls></video>
+					</div>
 
-                    <!-- Carousel Buttons -->
-                    <button th:if="${post.mediaList.size() > 1}" class="carousel-btn left"
-                            th:attr="onclick=|prevMedia(${post.id})|">&#10094;</button>
-                    <button th:if="${post.mediaList.size() > 1}" class="carousel-btn right"
-                            th:attr="onclick=|nextMedia(${post.id})|">&#10095;</button>
-                </div>
+					<!-- Carousel Buttons -->
+					<button th:if="${post.mediaList.size() > 1}" class="carousel-btn left"
+						th:attr="onclick=|prevMedia(${post.id})|">&#10094;</button>
+					<button th:if="${post.mediaList.size() > 1}" class="carousel-btn right"
+						th:attr="onclick=|nextMedia(${post.id})|">&#10095;</button>
+				</div>
 
-                <!-- Likes -->
-                <div class="like-section">
-                    <span th:id="'like-count-' + ${post.id}" th:text="${post.likeCount}">0</span> Likes
-                    <button type="button" class="like-btn" th:id="'like-btn-' + ${post.id}"
-                            th:attr="onclick=|toggleLike(${post.id})|">Like/Unlike</button>
-                </div>
+				<!-- Likes -->
+				<div class="like-section">
+					<!-- Clickable Like Count -->
+					<span th:id="'like-count-' + ${post.id}" th:text="${post.likeCount}"
+						th:attr="onclick=|showLikes(${post.id})|" style="cursor: pointer; color: blue;">
+						0
+					</span> Likes
 
-                <!-- Comments -->
-                <div style="margin-top: 10px;">
-                    <div th:id="'comments-' + ${post.id}">
-                        <div th:each="comment : ${post.comments}">
-                            <p>
-                                <strong th:text="${comment.user.getUsernameField()}">Username</strong>:
-                                <span th:text="${comment.text}">Comment text</span>
-                                <button th:if="${comment.user.usernameField == user.usernameField}"
-                                        class="comment-delete-btn"
-                                        th:attr="onclick=|deleteComment(${comment.id})|">Delete</button>
-                            </p>
-                        </div>
-                    </div>
-                    <form th:onsubmit="'submitComment(event,' + ${post.id} + ')'" method="post">
-                        <input type="text" name="text" placeholder="Add a comment..." required
-                               style="width: 70%; padding: 6px; margin-right: 10px;" />
-                        <button type="submit">Comment</button>
-                    </form>
-                </div>
+					<!-- Like/Unlike Button -->
+					<button type="button" class="like-btn" th:id="'like-btn-' + ${post.id}"
+						th:attr="onclick=|toggleLike(${post.id})|">
+						Like/Unlike
+					</button>
+				</div>
 
-                <!-- Delete -->
-                <form th:action="@{/posts/delete/{postId}(postId=${post.id})}" method="post">
-                    <button type="submit">Delete</button>
-                </form>
 
-                <!-- Edit -->
-                <button class="edit-btn" th:attr="data-id=${post.id}" onclick="showEditForm(this)">Edit</button>
-                <div th:id="'edit-form-' + ${post.id}" style="display:none; margin-top: 10px;">
-                    <form th:action="@{'/posts/update/' + ${post.id}}" method="post"
-                          onsubmit="return handleEditSubmit(event, this)">
-                        <input type="text" name="caption" th:value="${post.caption}" required />
-                        <button type="submit">Update</button>
-                        <button type="button" th:attr="onclick=|cancelEdit(${post.id})|">Cancel</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <p th:if="${userPosts == null or userPosts.isEmpty()}">No posts yet</p>
-    </div>
+				<!-- Comments -->
+				<div style="margin-top: 10px;">
+					<div th:id="'comments-' + ${post.id}">
+						<div th:each="comment : ${post.comments}">
+							<p>
+								<strong th:text="${comment.user.getUsernameField()}">Username</strong>:
+								<span th:text="${comment.text}">Comment text</span>
+								<button th:if="${comment.user.usernameField == user.usernameField}"
+									class="comment-delete-btn"
+									th:attr="onclick=|deleteComment(${comment.id})|">Delete</button>
+							</p>
+						</div>
+					</div>
+					<form th:onsubmit="'submitComment(event,' + ${post.id} + ')'" method="post">
+						<input type="text" name="text" placeholder="Add a comment..." required
+							style="width: 70%; padding: 6px; margin-right: 10px;" />
+						<button type="submit">Comment</button>
+					</form>
+				</div>
 
-    <!-- Carousel Script -->
-    <script>
-        function showMedia(postId, index) {
-            const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
-            mediaItems.forEach(item => item.classList.remove("active"));
-            if (mediaItems[index]) {
-                mediaItems[index].classList.add("active");
-            }
-        }
-        function nextMedia(postId) {
-            const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
-            let currentIndex = Array.from(mediaItems).findIndex(item => item.classList.contains("active"));
-            let nextIndex = (currentIndex + 1) % mediaItems.length;
-            showMedia(postId, nextIndex);
-        }
-        function prevMedia(postId) {
-            const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
-            let currentIndex = Array.from(mediaItems).findIndex(item => item.classList.contains("active"));
-            let prevIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
-            showMedia(postId, prevIndex);
-        }
-    </script>
+				<!-- Delete -->
+				<form th:action="@{/posts/delete/{postId}(postId=${post.id})}" method="post">
+					<button type="submit">Delete</button>
+				</form>
 
-    <script th:src="@{/js/profile.js}"></script>
+				<!-- Edit -->
+				<button class="edit-btn" th:attr="data-id=${post.id}" onclick="showEditForm(this)">Edit</button>
+				<div th:id="'edit-form-' + ${post.id}" style="display:none; margin-top: 10px;">
+					<form th:action="@{'/posts/update/' + ${post.id}}" method="post"
+						onsubmit="return handleEditSubmit(event, this)">
+						<input type="text" name="caption" th:value="${post.caption}" required />
+						<button type="submit">Update</button>
+						<button type="button" th:attr="onclick=|cancelEdit(${post.id})|">Cancel</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<p th:if="${userPosts == null or userPosts.isEmpty()}">No posts yet</p>
+	</div>
+	<!-- Likes Modal -->
+	<div id="likesModal" class="modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+	     background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+		<div class="modal-content" style="background: white; padding: 20px; border-radius: 10px; max-width: 400px;">
+			<span onclick="closeLikesModal()" style="cursor:pointer; float:right; font-size:20px;">&times;</span>
+			<h3>Liked by</h3>
+			<ul id="likesList"></ul>
+		</div>
+	</div>
+
+	<script th:src="@{/js/profile.js}"></script>
 </body>
 
 </html>

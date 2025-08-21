@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	const followBtn = document.querySelector(".follow-btn");
 	if (followBtn) {
 		followBtn.addEventListener("click", function() {
-			const targetUserId = this.getAttribute("data-userid"); // NOTE: must be userId, not username
+			const targetUserId = this.getAttribute("data-userid"); 
 			const isFollowing = this.textContent.trim() === "Unfollow";
 
 			if (!targetUserId) {

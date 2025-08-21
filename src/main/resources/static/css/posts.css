@@ -137,3 +137,40 @@ body {
 .comment-delete-btn:hover {
 	background-color: #c82333;
 }
+
+.carousel-container {
+	position: relative;
+	max-width: 500px;
+	margin: auto;
+}
+
+.carousel-media {
+	display: none;
+	width: 100%;
+	border-radius: 8px;
+}
+
+.carousel-media.active {
+	display: block;
+}
+
+.carousel-btn {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	border: none;
+	font-size: 20px;
+	padding: 10px;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+.carousel-btn.left {
+	left: 10px;
+}
+
+.carousel-btn.right {
+	right: 10px;
+}

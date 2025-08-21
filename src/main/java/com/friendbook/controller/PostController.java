@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.friendbook.model.Post;
+import com.friendbook.model.PostLike;
 import com.friendbook.model.User;
 import com.friendbook.repository.PostRepository;
 import com.friendbook.repository.UserRepository;
@@ -81,5 +84,14 @@ public class PostController {
 	public String updatePost(@PathVariable Long postId, @RequestParam String caption, Principal principal) {
 		postService.updatePostCaption(postId, caption, principal.getName());
 		return "redirect:/profile";
+	}
+	
+	@GetMapping("/posts/{postId}/likes")
+	@ResponseBody
+	public List<User> getPostLikes(@PathVariable Long postId) {
+	    Post post = postService.getPostById(postId);
+	    return post.getLikes().stream()
+	               .map(PostLike::getUser) // Assuming PostLike has getUser()
+	               .collect(Collectors.toList());
 	}
 }

@@ -31,7 +31,7 @@
 		<button class="button send-request-btn" th:data-username="${user.usernameField}"
 			th:disabled="${requestStatus == 'pending' or requestStatus == 'accepted'}"
 			th:text="${requestStatus == 'pending' ? 'Request Sent' : (requestStatus == 'accepted' ? 'Friends' : 'Send Request')}">
-		</button>
+		</button> 
 	</div>
 
 	<script th:src="@{/js/user-card.js}"></script>

@@ -5,6 +5,45 @@
 	<title>Feed - FriendBook</title>
 	<meta name="username" th:content="${#authentication.name}">
 	<link rel="stylesheet" th:href="@{/css/posts.css}" />
+	<style>
+		/* --- Carousel Styles --- */
+		.carousel-container {
+			position: relative;
+			max-width: 500px;
+			margin: auto;
+		}
+
+		.carousel-media {
+			display: none;
+			width: 100%;
+			border-radius: 8px;
+		}
+
+		.carousel-media.active {
+			display: block;
+		}
+
+		.carousel-btn {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			background-color: rgba(0, 0, 0, 0.5);
+			color: white;
+			border: none;
+			font-size: 20px;
+			padding: 10px;
+			cursor: pointer;
+			border-radius: 50%;
+		}
+
+		.carousel-btn.left {
+			left: 10px;
+		}
+
+		.carousel-btn.right {
+			right: 10px;
+		}
+	</style>
 </head>
 
 <body>
@@ -23,7 +62,26 @@
 		<div class="grid">
 			<div th:each="post : ${posts}" class="card">
 				<h3 th:text="${post.caption}">Caption</h3>
-				<img th:src="@{'/uploads/posts/' + ${post.imagePath}}" alt="Post Image" />
+
+				<!-- Media Carousel -->
+				<div class="carousel-container" th:id="'carousel-' + ${post.id}">
+					<div th:each="media,iterStat : ${post.mediaList}"
+						th:id="'media-' + ${post.id} + '-' + ${iterStat.index}"
+						th:class="${iterStat.index == 0} ? 'carousel-media active' : 'carousel-media'">
+						<!-- Image -->
+						<img th:if="${media.mediaType == 'image'}" th:src="@{'/uploads/posts/' + ${media.filePath}}"
+							alt="Post Image" />
+
+						<!-- Video -->
+						<video th:if="${media.mediaType == 'video'}" th:src="@{'/uploads/posts/' + ${media.filePath}}"
+							controls></video>
+					</div>
+					<button th:if="${post.mediaList.size() > 1}" class="carousel-btn left"
+						th:attr="onclick=|prevMedia(${post.id})|">&#10094;</button>
+					<button th:if="${post.mediaList.size() > 1}" class="carousel-btn right"
+						th:attr="onclick=|nextMedia(${post.id})|">&#10095;</button>
+				</div>
+
 				<p class="meta">
 					Posted by <b th:text="${post.user.getUsernameField()}">Username</b><br>
 					<span th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm')}">Date</span>
@@ -40,7 +98,8 @@
 				<!-- Comments Section -->
 				<div th:id="'comments-' + ${post.id}">
 					<div th:each="comment : ${post.comments}">
-						<p><b th:text="${comment.user.getUsernameField()}"></b>:
+						<p>
+							<b th:text="${comment.user.getUsernameField()}"></b>:
 							<span th:text="${comment.text}"></span>
 							<button th:if="${comment.user.usernameField == user.usernameField}"
 								class="comment-delete-btn" th:attr="onclick=|deleteComment(${comment.id})|">
@@ -55,12 +114,34 @@
 					<input type="text" name="text" placeholder="Add a comment" required />
 					<button type="submit">Comment</button>
 				</form>
-
 			</div>
 		</div>
 
 		<a class="back-link" th:href="@{/profile}">&larr; Back to Profile</a>
 	</div>
+
+	<!-- Carousel Script -->
+	<script>
+		function showMedia(postId, index) {
+			const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
+			mediaItems.forEach(item => item.classList.remove("active"));
+			if (mediaItems[index]) {
+				mediaItems[index].classList.add("active");
+			}
+		}
+		function nextMedia(postId) {
+			const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
+			let currentIndex = Array.from(mediaItems).findIndex(item => item.classList.contains("active"));
+			let nextIndex = (currentIndex + 1) % mediaItems.length;
+			showMedia(postId, nextIndex);
+		}
+		function prevMedia(postId) {
+			const mediaItems = document.querySelectorAll(`#carousel-${postId} .carousel-media`);
+			let currentIndex = Array.from(mediaItems).findIndex(item => item.classList.contains("active"));
+			let prevIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
+			showMedia(postId, prevIndex);
+		}
+	</script>
 
 	<script th:src="@{/js/posts.js}"></script>
 </body>

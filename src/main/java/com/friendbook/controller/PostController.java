@@ -50,10 +50,10 @@ public class PostController {
 	}
 
 	@PostMapping("/posts/create")
-	public String createPost(@RequestParam String caption, @RequestParam MultipartFile image, Principal principal,
+	public String createPost(@RequestParam String caption, @RequestParam("files") MultipartFile[] files, Principal principal,
 			RedirectAttributes redirectAttributes) throws IOException {
 		try {
-			postService.createPost(caption, image, principal.getName());
+			postService.createPost(caption, files, principal.getName());
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
 			return "redirect:/profile";

@@ -10,7 +10,7 @@ import com.friendbook.model.User;
 
 public interface PostService {
 
-	void createPost(String caption, MultipartFile image, String userEmail) throws IOException;
+	void createPost(String caption, MultipartFile[] files, String userEmail) throws IOException;
 
 	List<Post> getAllPosts();
 

@@ -1,7 +1,9 @@
 package com.friendbook.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,33 +59,43 @@ public class FriendRequestController {
 
 	@PostMapping("/friend-request/accept/{username}")
 	@ResponseBody
-	public ResponseEntity<String> acceptRequest(@PathVariable String username, Principal principal) {
-		try {
-			User currentUser = userRepository.findByEmail(principal.getName())
-					.orElseThrow(() -> new RuntimeException("Current user not found"));
+	public ResponseEntity<?> acceptRequest(@PathVariable String username, Principal principal) {
+	    try {
+	        User currentUser = userRepository.findByEmail(principal.getName())
+	                .orElseThrow(() -> new RuntimeException("Current user not found"));
 
-			User sender = userRepository.findByEmail(username)
-					.orElseThrow(() -> new RuntimeException("Sender not found"));
+	        User sender = userRepository.findByEmail(username)
+	                .orElseThrow(() -> new RuntimeException("Sender not found"));
 
-			FriendRequest request = friendRequestRepository
-					.findBySenderAndReceiverAndStatus(sender, currentUser, "pending")
-					.orElseThrow(() -> new RuntimeException("Friend request not found"));
+	        FriendRequest request = friendRequestRepository
+	                .findBySenderAndReceiverAndStatus(sender, currentUser, "pending")
+	                .orElseThrow(() -> new RuntimeException("Friend request not found"));
 
-			request.setStatus("accepted");
-			request.setAccepted(true);
-			friendRequestRepository.save(request);
+	        request.setStatus("accepted");
+	        request.setAccepted(true);
+	        friendRequestRepository.save(request);
 
-			currentUser.getFollowers().add(sender);
-			sender.getFollowing().add(currentUser);
+	        // only one-way follow
+	        currentUser.getFollowers().add(sender);
+	        sender.getFollowing().add(currentUser);
+	        userRepository.save(currentUser);
+	        userRepository.save(sender);
 
-			userRepository.save(currentUser);
-			userRepository.save(sender);
+	        // tell frontend: show Follow Back button
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("message", "Request accepted");
+	        response.put("showFollowBack", true);
+	        response.put("senderId", sender.getId());
+	        response.put("senderUsername", sender.getUsername());
 
-			return ResponseEntity.ok("Request accepted");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
-		}
+	        return ResponseEntity.ok(response);
+
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body(Map.of("error", e.getMessage()));
+	    }
 	}
+
 
 	@PostMapping("/friend-request/decline/{username}")
 	@ResponseBody
@@ -131,6 +143,34 @@ public class FriendRequestController {
 
 		model.addAttribute("pendingRequests", pendingRequests);
 		return "notifications";
+	}
+	
+	@PostMapping("/friend-request/follow-back/{username}")
+	@ResponseBody
+	public ResponseEntity<?> followBack(@PathVariable String username, Principal principal) {
+	    try {
+	        User currentUser = userRepository.findByEmail(principal.getName())
+	                .orElseThrow(() -> new RuntimeException("Current user not found"));
+
+	        User sender = userRepository.findByEmail(username)
+	                .orElseThrow(() -> new RuntimeException("User not found"));
+
+	        // follow-back
+	        sender.getFollowers().add(currentUser);
+	        currentUser.getFollowing().add(sender);
+	        userRepository.save(currentUser);
+	        userRepository.save(sender);
+
+	        return ResponseEntity.ok(Map.of(
+	            "message", "Followed back successfully",
+	            "senderId", sender.getId(),
+	            "senderUsername", sender.getUsername()
+	        ));
+
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body(Map.of("error", e.getMessage()));
+	    }
 	}
 
 }

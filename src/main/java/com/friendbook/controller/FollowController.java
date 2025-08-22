@@ -66,5 +66,4 @@ public class FollowController {
 	        return map;
 	    }).collect(Collectors.toList());
 	}
-
 }

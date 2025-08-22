@@ -32,6 +32,7 @@
 			th:disabled="${requestStatus == 'pending' or requestStatus == 'accepted'}"
 			th:text="${requestStatus == 'pending' ? 'Request Sent' : (requestStatus == 'accepted' ? 'Friends' : 'Send Request')}">
 		</button> 
+
 	</div>
 
 	<script th:src="@{/js/user-card.js}"></script>

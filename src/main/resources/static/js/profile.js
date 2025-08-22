@@ -220,58 +220,72 @@ function deleteComment(commentId) {
 			alert("Something went wrong");
 		});
 }
-
+// Load Followers
 function showFollowers() {
 	fetch('/followers')
-		.then(response => response.json())
-		.then(data => {
-			const list = document.getElementById('follow-list');
-			list.innerHTML = '';
-			document.getElementById('follow-title').textContent = 'Followers';
-
-			if (data.length === 0) {
-				const li = document.createElement('li');
-				li.textContent = 'No users found';
-				list.appendChild(li);
-			} else {
-				data.forEach(user => {
-					const li = document.createElement('li');
-					li.textContent = user.fullName || user.username || 'Unknown';
-					list.appendChild(li);
-				});
-			}
-
-			document.getElementById('follow-modal').style.display = 'block';
-		});
+		.then(res => res.json())
+		.then(users => renderFollowList(users, 'Followers'))
+		.catch(() => alert('Could not load followers'));
 }
 
+// Load Following (with unfollow buttons)
 function showFollowing() {
 	fetch('/following')
-		.then(response => response.json())
-		.then(data => {
-			const list = document.getElementById('follow-list');
-			list.innerHTML = '';
-			document.getElementById('follow-title').textContent = 'Following';
-
-			if (data.length === 0) {
-				const li = document.createElement('li');
-				li.textContent = 'No users found';
-				list.appendChild(li);
-			} else {
-				data.forEach(user => {
-					const li = document.createElement('li');
-					li.textContent = user.fullName || user.username || 'Unknown';
-					list.appendChild(li);
-				});
-			}
-
-			document.getElementById('follow-modal').style.display = 'block';
-		});
+		.then(res => res.json())
+		.then(users => renderFollowList(users, 'Following', true))
+		.catch(() => alert('Could not load following list'));
 }
 
+// Render followers/following list
+function renderFollowList(users, title, allowUnfollow = false) {
+	const list = document.getElementById('follow-list');
+	list.innerHTML = '';
+	document.getElementById('follow-title').textContent = title;
+
+	if (!users || users.length === 0) {
+		list.innerHTML = '<li>No users found</li>';
+	} else {
+		users.forEach(user => {
+			const li = document.createElement('li');
+			li.textContent = user.fullName || user.usernameField || 'Unknown';
+
+			if (allowUnfollow) {
+				const btn = document.createElement('button');
+				btn.textContent = 'Unfollow';
+				btn.style.marginLeft = '12px';
+				btn.onclick = () => handleUnfollow(user.id, li);
+				li.appendChild(btn);
+			}
+			list.appendChild(li);
+		});
+	}
+	document.getElementById('follow-modal').style.display = 'block';
+}
+
+// Handle unfollow action
+function handleUnfollow(targetUserId, liEl) {
+	fetch(`/api/unfollow/${targetUserId}`, { method: 'POST' })
+		.then(res => res.json())
+		.then(data => {
+			if (data.message === 'Unfollowed') {
+				if (liEl) liEl.remove();
+				const followingCountEl = document.getElementById('followingCount');
+				if (followingCountEl) followingCountEl.textContent = data.followingCount;
+				const targetFollowersEl = document.getElementById(`followersCount-${targetUserId}`);
+				if (targetFollowersEl) targetFollowersEl.textContent = data.targetFollowersCount;
+			} else {
+				alert(data.error || 'Failed to unfollow');
+			}
+		})
+		.catch(() => alert('Failed to unfollow'));
+}
+
+// Close modal
 function closeFollowModal() {
 	document.getElementById('follow-modal').style.display = 'none';
 }
+
+
 function showLikes(postId) {
 	fetch(`/api/likes/${postId}`)
 		.then(response => response.json())

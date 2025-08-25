@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +24,7 @@ public class Post {
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Media> mediaList = new ArrayList<>();
-	// private String imagePath;
+	
 	private LocalDateTime createdAt = LocalDateTime.now();
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -60,14 +59,6 @@ public class Post {
 	public void setCaption(String caption) {
 		this.caption = caption;
 	}
-
-//	public String getImagePath() {
-//		return imagePath;
-//	}
-//
-//	public void setImagePath(String imagePath) {
-//		this.imagePath = imagePath;
-//	}
 
 	public LocalDateTime getCreatedAt() {
 		return createdAt;

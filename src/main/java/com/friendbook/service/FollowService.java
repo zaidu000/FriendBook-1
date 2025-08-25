@@ -6,8 +6,6 @@ public interface FollowService {
 
     boolean followUser(String currentUserEmail, Long targetUserId);
 
-    //boolean unfollowUser(String currentUserEmail, Long targetUserId);
-
     long countFollowers(User user);
 
     long countFollowings(User user);

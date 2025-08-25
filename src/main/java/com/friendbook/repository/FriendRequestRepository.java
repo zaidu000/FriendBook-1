@@ -13,7 +13,9 @@ import com.friendbook.model.User;
 public interface FriendRequestRepository extends JpaRepository<FriendRequest,Long> {
 	
 	boolean existsBySenderAndReceiver(User sender, User receiver);
+	
 	List<FriendRequest> findByReceiverAndAcceptedFalse(User receiver);
+	
 	Optional<FriendRequest> findBySenderAndReceiver(User sender, User receiver);
 	
 	List<FriendRequest> findByReceiverAndStatus(User receiver, String status);

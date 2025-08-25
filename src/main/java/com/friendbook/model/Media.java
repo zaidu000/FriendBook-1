@@ -52,17 +52,4 @@ public class Media {
 		this.post = post;
 	}
 
-	public Media(Long id, String filePath, String mediaType, Post post) {
-		super();
-		this.id = id;
-		this.filePath = filePath;
-		this.mediaType = mediaType;
-		this.post = post;
-	}
-
-	public Media() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 }

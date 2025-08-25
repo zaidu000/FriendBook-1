@@ -10,11 +10,11 @@ import com.friendbook.model.User;
 @Configuration
 public class AppConfig {
 
+	//Converting DTO To Entity
 	@Bean
 	public ModelMapper modelMapper() {
 		ModelMapper modelMapper = new ModelMapper();
 
-		// Custom mapping: UserDTO.fullName -> User.name
 		modelMapper.typeMap(UserDTO.class, User.class).addMappings(mapper -> {
 			mapper.map(UserDTO::getFullName, User::setFullName);
 		});

@@ -51,7 +51,6 @@ public class SearchController {
         model.addAttribute("followersCount", viewedUser.getFollowers().size());
         model.addAttribute("followingCount", viewedUser.getFollowing().size());
 
-        // check if current user follows this user
         User currentUser = userService.getUserByUsername1(principal.getName()).orElse(null);
         String requestStatus = friendRequestService.getRequestStatus(currentUser, viewedUser);
         model.addAttribute("requestStatus", requestStatus);

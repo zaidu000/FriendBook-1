@@ -36,15 +36,6 @@ public class UserRestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new SignupResponse(false, "Captcha failed. Please try again."));
 		}
-
-		// We can create it using ModelMapper
-		/*
-		 * User user = new User(); 
-		 * user.setFullName(dto.fullName);
-		 * user.setEmail(dto.email); 
-		 * user.setPassword(dto.password);
-		 */
-		//Convert dto to entity
 		User user = modelMapper.map(dto, User.class);
 		
 		boolean ok = userService.registerUser(user);

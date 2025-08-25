@@ -49,13 +49,10 @@ public class FollowServiceImpl implements FollowService {
 			return new UnfollowResult(false, -1, -1);
 		}
 
-		// If your FollowRepository exposes Optional<Follow>
-		// findByFollowerAndFollowing(...)
 		Optional<Follow> existing = followRepo.findByFollowerAndFollowing(follower, following);
 		if (existing.isPresent()) {
 			followRepo.delete(existing.get());
 		} else {
-			// nothing to delete
 			return new UnfollowResult(false, countFollowings(follower), countFollowers(following));
 		}
 

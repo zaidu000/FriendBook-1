@@ -62,7 +62,6 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FriendRequest> receivedRequests = new ArrayList<>();
 
-	// Friend requests sent
 	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FriendRequest> sentRequests = new ArrayList<>();
 

@@ -91,7 +91,7 @@ public class PostController {
 	public List<User> getPostLikes(@PathVariable Long postId) {
 	    Post post = postService.getPostById(postId);
 	    return post.getLikes().stream()
-	               .map(PostLike::getUser) // Assuming PostLike has getUser()
+	               .map(PostLike::getUser) 
 	               .collect(Collectors.toList());
 	}
 }

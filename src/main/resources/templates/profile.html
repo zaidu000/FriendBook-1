@@ -14,7 +14,7 @@
 		<div class="nav-links">
 			<a th:href="@{/profile}">Home</a>
 			<a th:href="@{/posts}">Feed</a>
-			<a th:href="@{/notifications}" class="notification-icon">
+			<a th:href="@{/notifications}">
 				<span class="notification-count" th:text="${pendingRequestsCount}"
 					th:if="${pendingRequestsCount > 0}"></span>
 				Notifications

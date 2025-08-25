@@ -17,7 +17,7 @@ public class CaptchaUtility {
 
     public boolean verifyCaptcha(String token) {
         RestTemplate restTemplate = new RestTemplate();
-
+        
         Map<String, String> body = Map.of(
             "secret", secret,
             "response", token

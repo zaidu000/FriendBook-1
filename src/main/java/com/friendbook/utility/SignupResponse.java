@@ -1,6 +1,7 @@
 package com.friendbook.utility;
 
 public class SignupResponse {
+	
 	public boolean success;
 	public String message;
 

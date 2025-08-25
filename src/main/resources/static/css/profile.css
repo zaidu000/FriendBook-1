@@ -44,12 +44,6 @@ body {
 	color: var(--primary);
 }
 
-.notification-icon {
-	position: relative;
-	font-size: 20px;
-	margin-left: 20px;
-	cursor: pointer;
-}
 
 .notification-count {
 	position: absolute;

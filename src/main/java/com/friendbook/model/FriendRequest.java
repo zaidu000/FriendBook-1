@@ -61,5 +61,4 @@ public class FriendRequest {
 		this.accepted = accepted;
 	}
 	
-
 }

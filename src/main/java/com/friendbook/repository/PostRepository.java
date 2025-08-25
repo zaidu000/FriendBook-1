@@ -11,6 +11,7 @@ import com.friendbook.model.User;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
+	
 	List<Post> findByUserOrderByCreatedAtDesc(User user);
 	
 	List<Post> findByUserInOrderByCreatedAtDesc(Set<User> users);

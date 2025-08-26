@@ -12,8 +12,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.Data;
 
 @Entity
+@Data
 public class Post {
 
 	@Id
@@ -36,64 +38,8 @@ public class Post {
 	@ManyToOne
 	private User user;
 
-	public List<PostLike> getLikes() {
-		return likes;
-	}
-
-	public void setLikes(List<PostLike> likes) {
-		this.likes = likes;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getCaption() {
-		return caption;
-	}
-
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	public int getLikeCount() {
 		return likes.size();
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public List<Media> getMediaList() {
-		return mediaList;
-	}
-
-	public void setMediaList(List<Media> mediaList) {
-		this.mediaList = mediaList;
 	}
 
 }

@@ -23,8 +23,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 @Entity
+@Data
 public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,38 +67,6 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FriendRequest> sentRequests = new ArrayList<>();
 
-	public String getProfileImage() {
-		return profileImage;
-	}
-
-	public void setProfileImage(String profileImage) {
-		this.profileImage = profileImage;
-	}
-
-	public String getFavSongs() {
-		return favSongs;
-	}
-
-	public void setFavSongs(String favSongs) {
-		this.favSongs = favSongs;
-	}
-
-	public String getFavBooks() {
-		return favBooks;
-	}
-
-	public void setFavBooks(String favBooks) {
-		this.favBooks = favBooks;
-	}
-
-	public String getFavPlaces() {
-		return favPlaces;
-	}
-
-	public void setFavPlaces(String favPlaces) {
-		this.favPlaces = favPlaces;
-	}
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
@@ -132,64 +102,7 @@ public class User implements UserDetails {
 		return true;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public String getUsernameField() {
 		return username;
 	}
-
-	public List<Post> getPosts() {
-		return posts;
-	}
-
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
-	}
-
-	public Set<User> getFollowers() {
-		return followers;
-	}
-
-	public void setFollowers(Set<User> followers) {
-		this.followers = followers;
-	}
-
-	public Set<User> getFollowing() {
-		return following;
-	}
-
-	public void setFollowing(Set<User> following) {
-		this.following = following;
-	}
-
 }

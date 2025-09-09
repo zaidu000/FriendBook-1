@@ -17,15 +17,22 @@ import java.util.Optional;
 
 class LikeServiceImplTest {
 
+	// Create a mock instance of class
+	// It does not call real methods unless we explicitly tell it
     @Mock
     private LikeRepository likeRepository;
 
+	// Create a mock instance of class
+	// It does not call real methods unless we explicitly tell it
     @Mock
     private UserRepository userRepository;
 
+	// Create a mock instance of class
+	// It does not call real methods unless we explicitly tell it
     @Mock
     private PostRepository postRepository;
 
+    // Create an instance of class under test and inject the mocks annotated with @Mock
     @InjectMocks
     private LikeServiceImpl likeService;
 
@@ -34,6 +41,7 @@ class LikeServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    // Click on like button
     @Test
     void testToggleLike_AddLike() {
         User user = new User();
@@ -53,6 +61,7 @@ class LikeServiceImplTest {
         assertEquals(1, likeCount);
     }
 
+    // Remove like from the post
     @Test
     void testToggleLike_RemoveLike() {
         User user = new User();
@@ -72,6 +81,7 @@ class LikeServiceImplTest {
         assertEquals(0, likeCount);
     }
 
+    // Click on like button but either user or post is missing
     @Test
     void testToggleLike_UserOrPostMissing() {
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.empty());
@@ -81,6 +91,7 @@ class LikeServiceImplTest {
         assertEquals(-1, result);
     }
 
+    // Get like count of that post
     @Test
     void testGetLikeCount() {
         Post post = new Post();

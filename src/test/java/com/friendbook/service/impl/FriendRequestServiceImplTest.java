@@ -14,9 +14,12 @@ import java.util.*;
 
 class FriendRequestServiceImplTest {
 
+	// Create a mock instance of class
+	// It does not call real methods unless we explicitly tell it
     @Mock
     private FriendRequestRepository friendRequestRepository;
 
+    // Create an instance of class under test and inject the mocks annotated with @Mock
     @InjectMocks
     private FriendRequestServiceImpl friendRequestService;
 
@@ -25,6 +28,7 @@ class FriendRequestServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    // Get request status when request exists
     @Test
     void testGetRequestStatus_RequestExists() {
         User sender = new User();
@@ -40,6 +44,7 @@ class FriendRequestServiceImplTest {
         assertEquals("pending", status);
     }
 
+    // Get request status when request does not exists
     @Test
     void testGetRequestStatus_RequestNotExists() {
         User sender = new User();
@@ -53,12 +58,14 @@ class FriendRequestServiceImplTest {
         assertNull(status);
     }
 
+    // Get request status when users are null
     @Test
     void testGetRequestStatus_NullUsers() {
         assertNull(friendRequestService.getRequestStatus(null, new User()));
         assertNull(friendRequestService.getRequestStatus(new User(), null));
     }
 
+    // Send request successfully
     @Test
     void testSendRequest_Success() {
         User sender = new User();
@@ -72,6 +79,7 @@ class FriendRequestServiceImplTest {
         verify(friendRequestRepository).save(any(FriendRequest.class));
     }
 
+    // Send request that is already sent
     @Test
     void testSendRequest_AlreadySent() {
         User sender = new User();
@@ -87,6 +95,7 @@ class FriendRequestServiceImplTest {
         assertEquals("Request already sent", exception.getMessage());
     }
 
+    // Get all pending requests
     @Test
     void testGetPendingRequests() {
         User receiver = new User();
@@ -100,6 +109,7 @@ class FriendRequestServiceImplTest {
         assertEquals(2, result.size());
     }
 
+    // Accept requests
     @Test
     void testAcceptRequest() {
         User sender = new User();
@@ -124,12 +134,14 @@ class FriendRequestServiceImplTest {
         verify(friendRequestRepository).save(request);
     }
 
+    // Decline request
     @Test
     void testDeclineRequest() {
         friendRequestService.declineRequest(1L);
         verify(friendRequestRepository).deleteById(1L);
     }
 
+    // Already requested when exists 
     @Test
     void testAlreadyRequested_WhenExists() {
         User sender = new User();
@@ -142,6 +154,7 @@ class FriendRequestServiceImplTest {
         assertTrue(friendRequestService.alreadyRequested(sender, receiver));
     }
 
+    // Already requested when not exists
     @Test
     void testAlreadyRequested_WhenNotExists() {
         User sender = new User();

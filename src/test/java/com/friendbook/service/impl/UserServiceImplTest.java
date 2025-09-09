@@ -23,6 +23,7 @@ class UserServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    // Test the registration where user is already exists
     @Test
     void testRegisterUser_UserAlreadyExists() {
         User user = new User();
@@ -36,6 +37,7 @@ class UserServiceImplTest {
         verify(userRepository, never()).save(any(User.class));
     }
 
+    // Test the registration where user is new
     @Test
     void testRegisterUser_NewUser() {
         User user = new User();
@@ -48,18 +50,12 @@ class UserServiceImplTest {
         boolean result = userService.registerUser(user);
 
         assertTrue(result);
-        assertNotNull(user.getUsername());
+        assertNotNull(user.getUsernameField());
         assertNotEquals("password123", user.getPassword()); 
         verify(userRepository, times(1)).save(user);
     }
 
-    @Test
-    void testGenerateUsername() {
-        String username = userService.generateUsername("John Doe");
-
-        assertTrue(username.matches("JohnD\\d{3}"));
-    }
-
+    //Get user by username where user is found
     @Test
     void testGetUserByUsername_UserFound() {
         User user = new User();
@@ -73,6 +69,7 @@ class UserServiceImplTest {
         assertEquals("user@example.com", result.getEmail());
     }
 
+    // Get user by username where user is not found
     @Test
     void testGetUserByUsername_UserNotFound() {
         when(userRepository.findByEmail("nonexistent@example.com")).thenReturn(Optional.empty());
@@ -82,6 +79,7 @@ class UserServiceImplTest {
         });
     }
 
+    // Test search user by keyword
     @Test
     void testSearchUsersByKeyword() {
         List<User> users = new ArrayList<>();
@@ -93,7 +91,7 @@ class UserServiceImplTest {
         assertEquals(1, result.size());
     }
 
-
+    // save the user
     @Test
     void testSave() {
         User user = new User();

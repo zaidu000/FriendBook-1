@@ -82,11 +82,11 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public void deletePost(Long postId, String userEmail) {
-		User user = userRepository.findByEmail(userEmail).orElse(null);
-		Post post = postRepository.findById(postId).orElse(null);
-		if (post != null && post.getUser().equals(user)) {
-			postRepository.delete(post);
-		}
+	    User user = userRepository.findByEmail(userEmail).orElse(null);
+	    Post post = postRepository.findById(postId).orElse(null);
+	    if (post != null && user != null && post.getUser().getEmail().equals(user.getEmail())) {
+	        postRepository.delete(post);
+	    }
 	}
 
 	@Override

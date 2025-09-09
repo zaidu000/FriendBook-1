@@ -30,6 +30,7 @@ class FollowServiceImplTest {
 		MockitoAnnotations.openMocks(this);
 	}
 
+	// Follow when it is success
 	@Test
 	void testFollowUser_Success() {
 		User follower = new User();
@@ -49,6 +50,7 @@ class FollowServiceImplTest {
 		verify(followRepo).save(any(Follow.class));
 	}
 
+	// Already following the follow user
 	@Test
 	void testFollowUser_AlreadyFollowing() {
 		User follower = new User();
@@ -64,6 +66,7 @@ class FollowServiceImplTest {
 		verify(followRepo, never()).save(any());
 	}
 
+	// Test the follow user when the same user
 	@Test
 	void testFollowUser_SameUser() {
 		User follower = new User();
@@ -79,6 +82,7 @@ class FollowServiceImplTest {
 		verify(followRepo, never()).save(any());
 	}
 
+	// Unfollow users with counts successfully
 	@Test
 	void testUnfollowUserWithCounts_Success() {
 		User follower = new User();
@@ -100,6 +104,7 @@ class FollowServiceImplTest {
 		verify(followRepo).delete(follow);
 	}
 
+	// Unfollow user with counts when follow not exists
 	@Test
 	void testUnfollowUserWithCounts_FollowNotExists() {
 		User follower = new User();
@@ -119,6 +124,7 @@ class FollowServiceImplTest {
 		verify(followRepo, never()).delete(any());
 	}
 
+	// Unfollow the user with counts when user is missing
 	@Test
 	void testUnfollowUserWithCounts_UserMissing() {
 		when(userRepo.findByEmail("follower@example.com")).thenReturn(Optional.empty());
@@ -130,6 +136,7 @@ class FollowServiceImplTest {
 		assertEquals(-1, result.targetFollowersCount());
 	}
 
+	// Count the followers
 	@Test
 	void testCountFollowers() {
 		User user = new User();
@@ -140,6 +147,7 @@ class FollowServiceImplTest {
 		assertEquals(10L, count);
 	}
 
+	// Count the followings
 	@Test
 	void testCountFollowings() {
 		User user = new User();
@@ -150,6 +158,7 @@ class FollowServiceImplTest {
 		assertEquals(7L, count);
 	}
 
+	// Is it following
 	@Test
 	void testIsFollowing() {
 		User follower = new User();
@@ -160,6 +169,7 @@ class FollowServiceImplTest {
 		assertTrue(followService.isFollowing(follower, following));
 	}
 
+	// Unfollow successfully
 	@Test
 	void testUnfollow_Success() {
 		User follower = new User();
@@ -186,6 +196,7 @@ class FollowServiceImplTest {
 		verify(followRepo).delete(follow);
 	}
 
+	// Unfollow when there is no follow relation
 	@Test
 	void testUnfollow_NoFollowRelation() {
 		User follower = new User();
@@ -210,6 +221,7 @@ class FollowServiceImplTest {
 		verify(followRepo, never()).delete(any());
 	}
 
+	// Unfollow when user not found
 	@Test
 	void testUnfollow_UserNotFound() {
 		when(userRepo.findByEmail("follower@example.com")).thenReturn(Optional.empty());
@@ -219,6 +231,7 @@ class FollowServiceImplTest {
 		});
 	}
 
+	// Unfollow when target user is not found
 	@Test
 	void testUnfollow_TargetUserNotFound() {
 		User follower = new User();

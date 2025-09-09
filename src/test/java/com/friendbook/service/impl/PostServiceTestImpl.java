@@ -18,15 +18,22 @@ import java.util.*;
 
 class PostServiceTestImpl {
 
+	// Create a mock instance of class
+	// It does not call real methods unless we explicitly tell it
     @Mock
     private PostRepository postRepository;
 
+	// Create a mock instance of class
+	// It does not call real methods unless we explicitly tell it
     @Mock
     private UserRepository userRepository;
 
+	// Create a mock instance of class
+	// It does not call real methods unless we explicitly tell it
     @Mock
     private LikeRepository likeRepository;
 
+    // Create an instance of class under test and inject the mocks annotated with @Mock
     @InjectMocks
     private PostServiceImpl postService;
 
@@ -35,6 +42,7 @@ class PostServiceTestImpl {
         MockitoAnnotations.openMocks(this);
     }
 
+    // Create post with valid file
     @Test
     void testCreatePost_WithValidFile() throws IOException {
         User user = new User();
@@ -54,6 +62,7 @@ class PostServiceTestImpl {
         verify(postRepository, times(2)).save(any(Post.class)); // Once before and once after adding media
     }
 
+    // Create post with invalid file
     @Test
     void testCreatePost_InvalidFile_ThrowsException() {
         User user = new User();
@@ -75,6 +84,7 @@ class PostServiceTestImpl {
         assertEquals("Only image/video files are allowed.", exception.getMessage());
     }
 
+    // Get All posts
     @Test
     void testGetAllPosts() {
         Post post1 = new Post();
@@ -87,6 +97,7 @@ class PostServiceTestImpl {
         verify(postRepository, times(1)).findAllByOrderByCreatedAtDesc();
     }
 
+    // Delete those post where user can own the post
     @Test
     void testDeletePost_UserOwnsPost() {
         User user = new User();
@@ -104,6 +115,7 @@ class PostServiceTestImpl {
         verify(postRepository, times(1)).delete(post);
     }
 
+    // Delete those post where user does not own the post
     @Test
     void testDeletePost_UserDoesNotOwnPost() {
         User user = new User();
@@ -121,11 +133,11 @@ class PostServiceTestImpl {
 
         postService.deletePost(1L, "user@example.com");
 
-        // Should never delete because user and otherUser are different objects
+        // Ensure delete is never called because user is not the owner
         verify(postRepository, never()).delete(any());
     }
 
-
+    // Get like count if post exists
     @Test
     void testGetLikeCount_PostExists() {
         Post post = new Post();
@@ -138,7 +150,8 @@ class PostServiceTestImpl {
 
         assertEquals(5L, count);
     }
-
+    
+    // Get like count if post does not exists
     @Test
     void testGetLikeCount_PostNotFound() {
         when(postRepository.findById(1L)).thenReturn(Optional.empty());

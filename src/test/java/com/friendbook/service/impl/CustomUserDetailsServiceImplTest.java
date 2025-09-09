@@ -15,9 +15,12 @@ import java.util.Optional;
 
 class CustomUserDetailsServiceImplTest {
 
+	// Create a mock instance of class
+	// It does not call real methods unless we explicitly tell it
     @Mock
     private UserRepository userRepository;
 
+    // Create an instance of class under test and inject the mocks annotated with @Mock
     @InjectMocks
     private CustomUserDetailsServiceImpl userDetailsService;
 
@@ -26,6 +29,7 @@ class CustomUserDetailsServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    // This is for UserExists
     @Test
     void testLoadUserByUsername_UserExists() {
         User user = new User();
@@ -39,6 +43,7 @@ class CustomUserDetailsServiceImplTest {
         assertEquals("test@example.com", result.getUsername());
     }
 
+    // This is for UserNotFound
     @Test
     void testLoadUserByUsername_UserNotFound() {
         when(userRepository.findByEmail("missing@example.com")).thenReturn(Optional.empty());

@@ -16,12 +16,15 @@ import java.util.*;
 
 class CommentServiceImplTest {
 
+	// Create a mock instance of class
+	// It does not call real methods unless we explicitly tell it
     @Mock
     private CommentRepository commentRepository;
 
     @Mock
     private PostRepository postRepository;
 
+    // Create an instance of class under test and inject the mocks annotated with @Mock
     @InjectMocks
     private CommentServiceImpl commentService;
 
@@ -30,6 +33,7 @@ class CommentServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    // If post exists, we can retrieve comments
     @Test
     void testGetCommentsForPost_PostExists() {
         Post post = new Post();
@@ -49,15 +53,16 @@ class CommentServiceImplTest {
         assertEquals(comments, result);
     }
 
+    // If post does not exists, we can retrieve comments
     @Test
     void testGetCommentsForPost_PostNotExists() {
         when(postRepository.findById(1L)).thenReturn(Optional.empty());
 
         List<Comment> result = commentService.getCommentsForPost(1L);
-
         assertTrue(result.isEmpty());
     }
 
+    // Add a comment
     @Test
     void testSaveComment_Success() {
         Post post = new Post();
@@ -73,6 +78,7 @@ class CommentServiceImplTest {
         verify(commentRepository).save(any(Comment.class));
     }
 
+    // Add a comment but post is not found
     @Test
     void testSaveComment_PostNotFound() {
         when(postRepository.findById(1L)).thenReturn(Optional.empty());
@@ -84,6 +90,7 @@ class CommentServiceImplTest {
         assertEquals("Post not found", exception.getMessage());
     }
 
+    // Delete a comment successfully
     @Test
     void testDeleteComment_Success() {
         User user = new User();
@@ -101,6 +108,7 @@ class CommentServiceImplTest {
         verify(commentRepository).delete(comment);
     }
 
+    // Delete that comment, those are not found
     @Test
     void testDeleteComment_CommentNotFound() {
         when(commentRepository.findById(1L)).thenReturn(Optional.empty());
@@ -112,6 +120,7 @@ class CommentServiceImplTest {
         assertEquals("Comment not found", exception.getMessage());
     }
 
+    // Unauthorized user for delete comment
     @Test
     void testDeleteComment_UnauthorizedUser() {
         User user = new User();

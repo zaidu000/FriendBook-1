@@ -16,7 +16,8 @@ import com.friendbook.service.impl.CustomUserDetailsServiceImpl;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Autowired 
+    
+	@Autowired 
     private CustomUserDetailsServiceImpl uds;
 
     @Bean 

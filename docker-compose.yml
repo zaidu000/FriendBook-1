@@ -1,0 +1,42 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: friendbook_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: friendbook
+      MYSQL_USER: friendbook_user
+      MYSQL_PASSWORD: userpass123
+    volumes:
+      - ./friendbook_mysql_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - friendbook_network
+
+  friendbook_app:
+    image: paras1242/friendbook_app:latest
+    container_name: friendbook_apps
+    restart: always
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./friendbook_uploads/images:/app/uploads/images
+      - ./friendbook_uploads/posts:/app/uploads/posts
+      - ./wait-for-it.sh:/app/wait-for-it.sh
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://friendbook_mysql:3306/friendbook
+      SPRING_DATASOURCE_USERNAME: friendbook_user
+      SPRING_DATASOURCE_PASSWORD: userpass123
+      GOOGLE_RECAPTCHA_SECRET: 6LcQgJsrAAAAAMQFsPqGeP2FoYixHqhzy347Jvpg
+      GOOGLE_RECAPTCHA_SITE: 6LcQgJsrAAAAAIh7ctqhSrxCrksu6TL2lvFWp15O
+    depends_on:
+      - mysql
+    networks:
+      - friendbook_network
+    command: ["/bin/sh", "-c", "/app/wait-for-it.sh friendbook_mysql:3306 -- java -jar app.jar"]
+
+networks:
+  friendbook_network:
+    driver: bridge

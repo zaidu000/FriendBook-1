@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "paras1242/friendbook_app:latest"
+        CONTAINER_NAME = "friendbook_apps"
+        SERVER_PORT = "8090"
+        GOOGLE_RECAPTCHA_SITE = "6LcQgJsrAAAAAIh7ctqhSrxCrksu6TL2lvFWp15O"
+        GOOGLE_RECAPTCHA_SECRET = "6LcQgJsrAAAAAMQFsPqGeP2FoYixHqhzy347Jvpg"
+    }
+
+    stages {
+        stage('Pull Image') {
+            steps {
+                echo " Pulling Docker image..."
+                bat "docker pull %IMAGE_NAME%"
+            }
+        }
+
+        stage('Stop Existing Container') {
+            steps {
+                echo "⚙️ Stopping existing container if running..."
+                bat """
+                docker ps -q -f name=%CONTAINER_NAME% >nul
+                if not errorlevel 1 (
+                    docker stop %CONTAINER_NAME%
+                    docker rm %CONTAINER_NAME%
+                )
+                """
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                echo "🚀 Running Docker container..."
+                bat """
+                docker run -d --name %CONTAINER_NAME% -p %SERVER_PORT%:8090 -e SERVER_PORT=%SERVER_PORT% -e GOOGLE_RECAPTCHA_SITE=%GOOGLE_RECAPTCHA_SITE% -e GOOGLE_RECAPTCHA_SECRET=%GOOGLE_RECAPTCHA_SECRET% %IMAGE_NAME%
+
+                """
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                echo "🔍 Checking if container is running..."
+                bat "docker ps -f name=%CONTAINER_NAME%"
+            }
+        }
+    } // end of stages
+
+    post {
+        success {
+            echo " Deployment completed successfully!"
+        }
+        failure {
+            echo "Deployment failed!"
+        }
+    }
+}

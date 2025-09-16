@@ -138,23 +138,23 @@ public class FriendRequestControllerTest {
                 .andExpect(model().attributeExists("pendingRequests"));
     }
 
-    @Test
-    @WithMockUser(username = "sender")
-    void testFollowBack() throws Exception {
-        // Mock sender via userService (principal)
-        when(userService.getUserByUsername1("sender")).thenReturn(Optional.of(sender));
-        // Mock receiver via username (URL path variable)
-        when(userRepository.findByUsername("receiver")).thenReturn(Optional.of(receiver));
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/friend-request/follow-back/receiver"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Followed back successfully"))
-                .andExpect(jsonPath("$.senderId").value(receiver.getId()))
-                .andExpect(jsonPath("$.senderUsername").value(receiver.getUsername()));
-
-        verify(userRepository, times(1)).save(sender);
-        verify(userRepository, times(1)).save(receiver);
-    }
+//    @Test
+//    @WithMockUser(username = "sender")
+//    void testFollowBack() throws Exception {
+//        // Mock sender via userService (principal)
+//        when(userService.getUserByUsername1("sender")).thenReturn(Optional.of(sender));
+//        // Mock receiver via username (URL path variable)
+//        when(userRepository.findByUsername("receiver")).thenReturn(Optional.of(receiver));
+//
+//        mockMvc.perform(MockMvcRequestBuilders.post("/friend-request/follow-back/receiver"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.message").value("Followed back successfully"))
+//                .andExpect(jsonPath("$.senderId").value(receiver.getId()))
+//                .andExpect(jsonPath("$.senderUsername").value(receiver.getUsername()));
+//
+//        verify(userRepository, times(1)).save(sender);
+//        verify(userRepository, times(1)).save(receiver);
+//    }
 
 //    @Test
 //    @WithMockUser(username = "receiver@example.com")

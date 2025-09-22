@@ -16,7 +16,7 @@ services:
       - friendbook_network
 
   friendbook_app:
-    image: paras1242/friendbook_app:latest
+    image: zaidu000/friendbook
     container_name: friendbook_apps
     restart: always
     ports:

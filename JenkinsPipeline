@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_CREDENTIALS = credentials('DockerHub')
+        IMAGE_NAME = "zaidu000/friendbook:latest"
+        DOCKER_COMPOSE_FILE = "docker-compose.yml"
+    }
+
+    stages {
+
+        stage('Docker Login') {
+            steps {
+                script {
+                    echo "Logging in to Docker Hub..."
+                    sh "echo ${DOCKER_CREDENTIALS_PSW} | docker login -u ${DOCKER_CREDENTIALS_USR} --password-stdin"
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo "Building Docker image ${IMAGE_NAME}..."
+                sh "docker build -t ${IMAGE_NAME} ."
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                echo "Pushing Docker image to Docker Hub..."
+                sh "docker push ${IMAGE_NAME}"
+            }
+        }
+
+        stage('Run with Docker Compose') {
+            steps {
+                echo "Starting containers with Docker Compose..."
+                dir("${WORKSPACE}") {
+                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Cleaning up workspace..."
+            sh "docker logout"
+        }
+        success {
+            echo "Pipeline completed successfully!"
+        }
+        failure {
+            echo "Pipeline failed. Check logs for details."
+        }
+    }
+}
